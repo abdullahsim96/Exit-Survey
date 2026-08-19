@@ -227,7 +227,7 @@ T = {
         "s4_title": "القسم 4: عبء العمل",
         "workload_manageable": "كان عبء عملي يمكن التعامل معه ضمن ساعات العمل العادية. *",
         "workload_balance": "كنت قادرًا على الحفاظ على توازن صحي بين العمل والحياة. *",
-        "workload_deadlines": "كانت الأهداف ومؤشرات الأداء (KPIs) الخاصة بي واقعية وقابلة للتحقيق. *",
+        "workload_deadlines": "كانت أهدافي ومؤشرات الأداء الرئيسية (KPIs) واقعية وقابلة للتحقيق. *",
         "s5_title": "القسم 5: التعويضات والمزايا",
         "comp_fair": "كان راتبي عادلاً بالنسبة لدوري ومسؤولياتي. *",
         "comp_market": "كان راتبي تنافسيًا مقارنة بالأدوار المماثلة في السوق. *",
@@ -284,19 +284,23 @@ def translated_choice(label, key, option_key, lang, values=None, horizontal=Fals
 
 
 # ----------------------------
-# Sidebar: HR login (shared by Analytics + Links tabs)
+# Admin auth gate (rendered inside the Dashboard/Links tabs only —
+# never on the survey page, so employees taking the survey never
+# see a password field).
 # ----------------------------
-with st.sidebar:
-    st.header("HR Dashboard Access")
-    pwd = st.text_input("Enter admin password", type="password")
+def require_admin_auth(widget_key):
+    if st.session_state.authenticated:
+        return True
+    st.subheader("🔒 HR Access Only")
+    pwd = st.text_input("Enter admin password", type="password", key=f"pwd_{widget_key}")
     admin_pwd = st.secrets.get("ADMIN_PASSWORD", "changeme")
     if pwd:
         if pwd == admin_pwd:
             st.session_state.authenticated = True
-            st.success("Access granted.")
+            st.rerun()
         else:
-            st.session_state.authenticated = False
             st.error("Incorrect password.")
+    return False
 
 # ----------------------------
 # Tabs
@@ -551,8 +555,8 @@ with tab_survey:
 # TAB 2: ANALYTICS DASHBOARD (HR only) - kept in English
 # ============================================================
 with tab_dashboard:
-    if not st.session_state.authenticated:
-        st.info("🔒 Enter the admin password in the sidebar to view the analytics dashboard.")
+    if not require_admin_auth("dashboard"):
+        pass
     else:
         try:
             df = load_responses()
@@ -652,8 +656,8 @@ with tab_dashboard:
 # TAB 3: ADMIN - SURVEY LINKS + DEADLINES (HR only)
 # ============================================================
 with tab_links:
-    if not st.session_state.authenticated:
-        st.info("🔒 Enter the admin password in the sidebar to manage survey links.")
+    if not require_admin_auth("links"):
+        pass
     else:
         st.title("🔗 Survey Links & Deadlines")
         st.markdown(
