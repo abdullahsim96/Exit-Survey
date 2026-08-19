@@ -1,14 +1,21 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-import os
+from supabase import create_client
 
 # ----------------------------
 # Page config
 # ----------------------------
 st.set_page_config(page_title="Employee Exit Survey", page_icon="📋", layout="centered")
 
-DATA_FILE = "exit_survey_responses.csv"
+TABLE_NAME = "exit_survey_responses"
+
+
+@st.cache_resource
+def get_supabase_client():
+    url = st.secrets["SUPABASE_URL"]
+    key = st.secrets["SUPABASE_KEY"]
+    return create_client(url, key)
 
 RATING_LABELS = {
     1: "1 - Strongly Disagree",
@@ -234,7 +241,6 @@ if submitted:
         )
     else:
         response = {
-            "timestamp": datetime.now().isoformat(timespec="seconds"),
             "department": department,
             "job_title": job_title,
             "tenure": tenure,
@@ -273,14 +279,16 @@ if submitted:
             "other_comments": q_other_comments,
         }
 
-        df_new = pd.DataFrame([response])
-        if os.path.exists(DATA_FILE):
-            df_new.to_csv(DATA_FILE, mode="a", header=False, index=False)
-        else:
-            df_new.to_csv(DATA_FILE, mode="w", header=True, index=False)
-
-        st.success("Thank you! Your response has been submitted.")
-        st.balloons()
+        try:
+            supabase = get_supabase_client()
+            supabase.table(TABLE_NAME).insert(response).execute()
+            st.success("Thank you! Your response has been submitted.")
+            st.balloons()
+        except Exception as e:
+            st.error(
+                "Something went wrong saving your response. Please let HR know. "
+                f"(Details: {e})"
+            )
 
 # ----------------------------
 # Optional HR-only view (simple password gate)
@@ -288,18 +296,26 @@ if submitted:
 with st.sidebar:
     st.header("HR Dashboard Access")
     pwd = st.text_input("Enter admin password", type="password")
-    admin_pwd = st.secrets.get("ADMIN_PASSWORD", "changeme") if hasattr(st, "secrets") else "changeme"
+    admin_pwd = st.secrets.get("ADMIN_PASSWORD", "changeme")
     if pwd and pwd == admin_pwd:
         st.success("Access granted")
-        if os.path.exists(DATA_FILE):
-            df = pd.read_csv(DATA_FILE)
-            st.metric("Total responses", len(df))
-            st.dataframe(df)
-            st.download_button(
-                "Download CSV",
-                data=df.to_csv(index=False).encode("utf-8"),
-                file_name="exit_survey_responses.csv",
-                mime="text/csv",
-            )
-        else:
-            st.info("No responses submitted yet.")
+        try:
+            supabase = get_supabase_client()
+            result = supabase.table(TABLE_NAME).select("*").order(
+                "created_at", desc=True
+            ).execute()
+            rows = result.data
+            if rows:
+                df = pd.DataFrame(rows)
+                st.metric("Total responses", len(df))
+                st.dataframe(df)
+                st.download_button(
+                    "Download CSV",
+                    data=df.to_csv(index=False).encode("utf-8"),
+                    file_name="exit_survey_responses.csv",
+                    mime="text/csv",
+                )
+            else:
+                st.info("No responses submitted yet.")
+        except Exception as e:
+            st.error(f"Could not load responses. (Details: {e})")
