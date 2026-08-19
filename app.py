@@ -107,19 +107,11 @@ with tab_survey:
     with st.form("exit_survey_form", clear_on_submit=False):
 
         st.subheader("Section 1: Background")
-        department = st.text_input("Department *")
+        department = st.selectbox(
+            "Department *",
+            ["", "SS-Kids", "SS-Adults", "CC& TMK", "Operations", "HR"],
+        )
         job_title = st.text_input("Job title *")
-        tenure = st.selectbox(
-            "Length of employment *",
-            ["", "<6 months", "6-12 months", "1-2 years", "2-5 years", "5+ years"],
-        )
-        employment_type = st.selectbox(
-            "Employment type *", ["", "Full-time", "Part-time", "Contract"]
-        )
-        departure_type = st.selectbox(
-            "Is this departure *",
-            ["", "Voluntary resignation", "Involuntary", "End of contract"],
-        )
 
         st.divider()
         st.subheader("Section 2: Role Clarity & Understanding")
@@ -277,12 +269,6 @@ with tab_survey:
             required_missing.append("Department")
         if not job_title.strip():
             required_missing.append("Job title")
-        if not tenure:
-            required_missing.append("Length of employment")
-        if not employment_type:
-            required_missing.append("Employment type")
-        if not departure_type:
-            required_missing.append("Departure type")
         if not q_primary_reason:
             required_missing.append("Primary reason for leaving")
 
@@ -295,9 +281,6 @@ with tab_survey:
             response = {
                 "department": department,
                 "job_title": job_title,
-                "tenure": tenure,
-                "employment_type": employment_type,
-                "departure_type": departure_type,
                 "role_clarity": q_role_clarity,
                 "role_tools": q_role_tools,
                 "role_match": q_role_match,
@@ -366,7 +349,7 @@ with tab_dashboard:
                 st.rerun()
 
             # ---- Top-line metrics ----
-            col1, col2, col3, col4 = st.columns(4)
+            col1, col2, col3 = st.columns(3)
             col1.metric("Total responses", len(df))
             avg_enps = df["enps_recommend_0_10"].mean()
             col2.metric("Avg. eNPS (0-10)", f"{avg_enps:.1f}" if pd.notna(avg_enps) else "N/A")
@@ -376,10 +359,6 @@ with tab_dashboard:
                 else 0
             )
             col3.metric("Would return", f"{pct_return:.0f}%")
-            pct_voluntary = (
-                (df["departure_type"] == "Voluntary resignation").sum() / len(df) * 100
-            )
-            col4.metric("Voluntary departures", f"{pct_voluntary:.0f}%")
 
             st.divider()
 
