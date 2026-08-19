@@ -1,3 +1,8 @@
+-- ============================================================
+-- FRESH INSTALL: run this whole file if you have not created
+-- the tables yet.
+-- ============================================================
+
 create table exit_survey_responses (
     id bigint generated always as identity primary key,
     created_at timestamptz default now(),
@@ -5,9 +10,8 @@ create table exit_survey_responses (
     department text,
     crm text,
     job_title text,
-    tenure text,
-    employment_type text,
-    departure_type text,
+    survey_language text,
+    link_token text,
 
     role_clarity int,
     role_tools int,
@@ -23,12 +27,10 @@ create table exit_survey_responses (
     workload_manageable int,
     workload_life_balance int,
     workload_deadlines_realistic int,
-    burnout_frequency text,
 
     comp_fair int,
     comp_market_competitive int,
     comp_benefits_satisfaction int,
-    comp_was_factor text,
 
     culture_respect int,
     culture_belonging int,
@@ -36,7 +38,6 @@ create table exit_survey_responses (
     culture_overall text,
     culture_text text,
 
-    location_fit int,
     location_was_factor text,
     location_text text,
 
@@ -44,15 +45,54 @@ create table exit_survey_responses (
     primary_reason_other text,
     enps_recommend_0_10 int,
     would_return text,
-    retain_text text,
     other_comments text
 );
 
--- Lock the table down: no public access at all.
+create table survey_links (
+    id bigint generated always as identity primary key,
+    created_at timestamptz default now(),
+    token text unique not null,
+    label text,
+    deadline timestamptz,
+    is_active boolean default true
+);
+
+-- Lock both tables down: no public access at all.
 -- The app connects with the service_role key, which bypasses RLS,
 -- so this keeps the data safe even if someone finds your Supabase URL.
 alter table exit_survey_responses enable row level security;
+alter table survey_links enable row level security;
 
--- If you already created this table before the CRM field was added,
--- run this single line instead of recreating the table from scratch:
+
+-- ============================================================
+-- MIGRATING AN EXISTING TABLE: if exit_survey_responses already
+-- exists with data in it, don't drop it — run only the lines
+-- below that you haven't already applied.
+-- ============================================================
+
+-- Fields added over time:
 -- alter table exit_survey_responses add column crm text;
+-- alter table exit_survey_responses add column survey_language text;
+-- alter table exit_survey_responses add column link_token text;
+
+-- Fields removed from the form (safe to leave the columns in
+-- place — they'll just stop receiving new data — or drop them
+-- if you want to clean up):
+-- alter table exit_survey_responses drop column if exists tenure;
+-- alter table exit_survey_responses drop column if exists employment_type;
+-- alter table exit_survey_responses drop column if exists departure_type;
+-- alter table exit_survey_responses drop column if exists burnout_frequency;
+-- alter table exit_survey_responses drop column if exists comp_was_factor;
+-- alter table exit_survey_responses drop column if exists location_fit;
+-- alter table exit_survey_responses drop column if exists retain_text;
+
+-- New table for the admin link/deadline feature:
+-- create table survey_links (
+--     id bigint generated always as identity primary key,
+--     created_at timestamptz default now(),
+--     token text unique not null,
+--     label text,
+--     deadline timestamptz,
+--     is_active boolean default true
+-- );
+-- alter table survey_links enable row level security;
