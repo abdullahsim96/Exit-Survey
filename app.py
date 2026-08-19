@@ -100,8 +100,9 @@ with tab_survey:
     st.markdown(
         "Thank you for taking the time to complete this survey. Your honest feedback "
         "helps us understand where we can improve. Responses are kept confidential and "
-        "reviewed in aggregate. This should take about **7-10 minutes**."
+        "reviewed in aggregate. This should take about **5-10 minutes**."
     )
+    st.caption("All questions are required.")
     st.divider()
 
     with st.form("exit_survey_form", clear_on_submit=False):
@@ -111,56 +112,57 @@ with tab_survey:
             "Department *",
             ["", "SS-Kids", "SS-Adults", "CC& TMK", "Operations", "HR"],
         )
+        crm = st.text_input("CRM *")
         job_title = st.text_input("Job title *")
 
         st.divider()
         st.subheader("Section 2: Role Clarity & Understanding")
         q_role_clarity = rating_question(
-            "I had a clear understanding of what was expected of me in my role.", "q_role_clarity"
+            "I had a clear understanding of what was expected of me in my role. *", "q_role_clarity"
         )
         q_role_tools = rating_question(
-            "I had the tools, information, and training needed to do my job well.", "q_role_tools"
+            "I had the tools, information, and training needed to do my job well. *", "q_role_tools"
         )
         q_role_match = rating_question(
-            "My actual day-to-day work matched what was described when I was hired.", "q_role_match"
+            "My actual day-to-day work matched what was described when I was hired. *", "q_role_match"
         )
         q_role_text = st.text_area(
-            "Was there anything about your role that felt unclear or different from what you expected?",
+            "Was there anything about your role that felt unclear or different from what you expected? *",
             key="q_role_text",
         )
 
         st.divider()
         st.subheader("Section 3: Manager Relationship")
         q_mgr_comm = rating_question(
-            "My manager communicated clearly and regularly with me.", "q_mgr_comm"
+            "My manager communicated clearly and regularly with me. *", "q_mgr_comm"
         )
         q_mgr_feedback = rating_question(
-            "My manager gave me useful, constructive feedback.", "q_mgr_feedback"
+            "My manager gave me useful, constructive feedback. *", "q_mgr_feedback"
         )
         q_mgr_growth = rating_question(
-            "My manager supported my growth and development.", "q_mgr_growth"
+            "My manager supported my growth and development. *", "q_mgr_growth"
         )
         q_mgr_comfort = rating_question(
-            "I felt comfortable raising concerns or issues with my manager.", "q_mgr_comfort"
+            "I felt comfortable raising concerns or issues with my manager. *", "q_mgr_comfort"
         )
         q_mgr_text = st.text_area(
-            "What, if anything, could your manager have done differently to support you better?",
+            "What, if anything, could your manager have done differently to support you better? *",
             key="q_mgr_text",
         )
 
         st.divider()
         st.subheader("Section 4: Workload")
         q_workload_manageable = rating_question(
-            "My workload was manageable within normal working hours.", "q_workload_manageable"
+            "My workload was manageable within normal working hours. *", "q_workload_manageable"
         )
         q_workload_balance = rating_question(
-            "I was able to maintain a healthy work-life balance.", "q_workload_balance"
+            "I was able to maintain a healthy work-life balance. *", "q_workload_balance"
         )
         q_workload_deadlines = rating_question(
-            "Deadlines and expectations were realistic.", "q_workload_deadlines"
+            "Deadlines and expectations were realistic. *", "q_workload_deadlines"
         )
         q_burnout_freq = st.select_slider(
-            "How often did you feel overworked or burned out?",
+            "How often did you feel overworked or burned out? *",
             options=["Never", "Rarely", "Sometimes", "Often", "Always"],
             key="q_burnout_freq",
         )
@@ -168,18 +170,18 @@ with tab_survey:
         st.divider()
         st.subheader("Section 5: Compensation & Benefits")
         q_comp_fair = rating_question(
-            "My salary was fair relative to my role and responsibilities.", "q_comp_fair"
+            "My salary was fair relative to my role and responsibilities. *", "q_comp_fair"
         )
         q_comp_market = rating_question(
-            "My salary was competitive compared to similar roles in the market.", "q_comp_market"
+            "My salary was competitive compared to similar roles in the market. *", "q_comp_market"
         )
         q_comp_benefits = rating_question(
-            "I was satisfied with the benefits offered (health, leave, retirement, etc.).",
+            "I was satisfied with the benefits offered (health, leave, retirement, etc.). *",
             "q_comp_benefits",
         )
         q_comp_factor = st.radio(
-            "Was compensation a significant factor in your decision to leave?",
-            ["Yes, primary reason", "Yes, contributing factor", "No", "Not applicable"],
+            "Was compensation a significant factor in your decision to leave? *",
+            ["Yes, primary reason", "Yes, contributing factor", "No"],
             key="q_comp_factor",
             index=None,
         )
@@ -187,38 +189,38 @@ with tab_survey:
         st.divider()
         st.subheader("Section 6: Culture & Environment")
         q_culture_respect = rating_question(
-            "I felt respected and valued as an employee.", "q_culture_respect"
+            "I felt respected and valued as an employee. *", "q_culture_respect"
         )
         q_culture_belong = rating_question(
-            "I felt a sense of belonging on my team.", "q_culture_belong"
+            "I felt a sense of belonging on my team. *", "q_culture_belong"
         )
         q_culture_values = rating_question(
-            "Leadership's actions matched the company's stated values.", "q_culture_values"
+            "Leadership's actions matched the company's stated values. *", "q_culture_values"
         )
         q_culture_overall = st.radio(
-            "I would describe the overall culture as:",
+            "I would describe the overall culture as: *",
             ["Very Positive", "Positive", "Neutral", "Negative", "Very Negative"],
             key="q_culture_overall",
             index=None,
         )
         q_culture_text = st.text_area(
-            "Was there a specific culture or environment issue that influenced your decision to leave?",
+            "Was there a specific culture or environment issue that influenced your decision to leave? *",
             key="q_culture_text",
         )
 
         st.divider()
         st.subheader("Section 7: Work Location & Flexibility")
         q_location_fit = rating_question(
-            "My work arrangement (on-site / hybrid / remote) met my needs.", "q_location_fit"
+            "My work arrangement (on-site / hybrid / remote) met my needs. *", "q_location_fit"
         )
         q_location_factor = st.radio(
-            "Did work location/commute play a role in your decision to leave?",
+            "Did work location/commute play a role in your decision to leave? *",
             ["Yes", "No"],
             key="q_location_factor",
             index=None,
         )
         q_location_text = st.text_area(
-            "If yes, briefly explain:", key="q_location_text"
+            "If yes, briefly explain: (required if yes above)", key="q_location_text"
         )
 
         st.divider()
@@ -239,7 +241,7 @@ with tab_survey:
             ],
         )
         q_primary_reason_other = st.text_input(
-            "If Other, please specify:", key="q_primary_reason_other"
+            "If Other, please specify: (required if 'Other' selected above)", key="q_primary_reason_other"
         )
         q_enps = st.slider(
             "Would you recommend this company as a place to work to a friend? (0 = Not at all, 10 = Definitely)",
@@ -249,28 +251,93 @@ with tab_survey:
             key="q_enps",
         )
         q_return = st.radio(
-            "Would you consider returning to this company in the future?",
+            "Would you consider returning to this company in the future? *",
             ["Yes", "Maybe", "No"],
             key="q_return",
             index=None,
         )
         q_retain_text = st.text_area(
-            "Is there anything we could have done to retain you?", key="q_retain_text"
+            "Is there anything we could have done to retain you? *", key="q_retain_text"
         )
         q_other_comments = st.text_area(
-            "Any other comments or feedback you'd like to share?", key="q_other_comments"
+            "Any other comments or feedback you'd like to share? *", key="q_other_comments"
         )
 
         submitted = st.form_submit_button("Submit Survey", use_container_width=True)
 
     if submitted:
         required_missing = []
-        if not department.strip():
+        if not department:
             required_missing.append("Department")
+        if not crm.strip():
+            required_missing.append("CRM")
         if not job_title.strip():
             required_missing.append("Job title")
+
+        if q_role_clarity is None:
+            required_missing.append("Role: clear understanding of expectations")
+        if q_role_tools is None:
+            required_missing.append("Role: had tools/training")
+        if q_role_match is None:
+            required_missing.append("Role: work matched expectations")
+        if not q_role_text.strip():
+            required_missing.append("Role: unclear aspects")
+
+        if q_mgr_comm is None:
+            required_missing.append("Manager: communication")
+        if q_mgr_feedback is None:
+            required_missing.append("Manager: feedback")
+        if q_mgr_growth is None:
+            required_missing.append("Manager: growth support")
+        if q_mgr_comfort is None:
+            required_missing.append("Manager: comfort raising concerns")
+        if not q_mgr_text.strip():
+            required_missing.append("Manager: what could be done differently")
+
+        if q_workload_manageable is None:
+            required_missing.append("Workload: manageable")
+        if q_workload_balance is None:
+            required_missing.append("Workload: work-life balance")
+        if q_workload_deadlines is None:
+            required_missing.append("Workload: realistic deadlines")
+
+        if q_comp_fair is None:
+            required_missing.append("Compensation: fairness")
+        if q_comp_market is None:
+            required_missing.append("Compensation: market competitiveness")
+        if q_comp_benefits is None:
+            required_missing.append("Compensation: benefits satisfaction")
+        if not q_comp_factor:
+            required_missing.append("Compensation: was it a factor")
+
+        if q_culture_respect is None:
+            required_missing.append("Culture: respect")
+        if q_culture_belong is None:
+            required_missing.append("Culture: belonging")
+        if q_culture_values is None:
+            required_missing.append("Culture: values alignment")
+        if not q_culture_overall:
+            required_missing.append("Culture: overall rating")
+        if not q_culture_text.strip():
+            required_missing.append("Culture: specific issue")
+
+        if q_location_fit is None:
+            required_missing.append("Location: work arrangement fit")
+        if not q_location_factor:
+            required_missing.append("Location: was it a factor")
+        if q_location_factor == "Yes" and not q_location_text.strip():
+            required_missing.append("Location: explanation")
+
         if not q_primary_reason:
             required_missing.append("Primary reason for leaving")
+        if q_primary_reason == "Other" and not q_primary_reason_other.strip():
+            required_missing.append("Primary reason: please specify")
+        if not q_return:
+            required_missing.append("Would consider returning")
+        if not q_retain_text.strip():
+            required_missing.append("What could have retained you")
+        if not q_other_comments.strip():
+            required_missing.append("Other comments")
 
         if required_missing:
             st.error(
@@ -280,6 +347,7 @@ with tab_survey:
         else:
             response = {
                 "department": department,
+                "crm": crm,
                 "job_title": job_title,
                 "role_clarity": q_role_clarity,
                 "role_tools": q_role_tools,

@@ -3,6 +3,7 @@ create table exit_survey_responses (
     created_at timestamptz default now(),
 
     department text,
+    crm text,
     job_title text,
     tenure text,
     employment_type text,
@@ -51,3 +52,7 @@ create table exit_survey_responses (
 -- The app connects with the service_role key, which bypasses RLS,
 -- so this keeps the data safe even if someone finds your Supabase URL.
 alter table exit_survey_responses enable row level security;
+
+-- If you already created this table before the CRM field was added,
+-- run this single line instead of recreating the table from scratch:
+-- alter table exit_survey_responses add column crm text;
