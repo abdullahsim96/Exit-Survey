@@ -80,7 +80,7 @@ SECTION_COLUMNS = {
         "workload_deadlines_realistic",
     ],
     "Compensation": ["comp_fair", "comp_benefits_satisfaction"],
-    "Vendor": ["vendor_communication", "vendor_support", "vendor_hr_services"],
+    "Vendor": ["vendor_support", "vendor_hr_services"],
     "Culture": ["culture_respect", "culture_belonging"],
 }
 
@@ -180,7 +180,6 @@ T = {
         "comp_fair": "My salary was fair relative to my role and responsibilities. *",
         "comp_benefits": "I was satisfied with the medical insurance benefits offered. *",
         "s6b_title": "Section 6: Vendor Satisfaction",
-        "vendor_comm": "I was satisfied with the communication with the vendor. *",
         "vendor_support": "I always find it easy to get support and communicate with the vendor. *",
         "vendor_hr": "I was satisfied with the HR services provided by the vendor. *",
         "vendor_text": "Any additional comments about your experience with the vendor? *",
@@ -234,7 +233,6 @@ T = {
         "comp_fair": "كان راتبي عادلاً بالنسبة لدوري ومسؤولياتي. *",
         "comp_benefits": "كنت راضيًا عن مزايا التأمين الطبي المقدمة. *",
         "s6b_title": "القسم 6: رضا المورد (Vendor)",
-        "vendor_comm": "كنت راضيًا عن التواصل مع المورد (Vendor). *",
         "vendor_support": "أجد دائمًا الدعم وأتواصل بسهولة مع المورد. *",
         "vendor_hr": "كنت راضيًا عن خدمات الموارد البشرية المقدمة من المورد. *",
         "vendor_text": "هل لديك أي تعليقات إضافية حول تجربتك مع المورد؟ *",
@@ -401,7 +399,6 @@ with tab_survey:
 
             st.divider()
             st.subheader(tr["s6b_title"])
-            q_vendor_comm = rating_question(tr["vendor_comm"], "q_vendor_comm", lang)
             q_vendor_support = rating_question(tr["vendor_support"], "q_vendor_support", lang)
             q_vendor_hr = rating_question(tr["vendor_hr"], "q_vendor_hr", lang)
             q_vendor_text = st.text_area(tr["vendor_text"], key="q_vendor_text")
@@ -480,8 +477,6 @@ with tab_survey:
             if q_comp_benefits is None:
                 required_missing.append(tr["comp_benefits"])
 
-            if q_vendor_comm is None:
-                required_missing.append(tr["vendor_comm"])
             if q_vendor_support is None:
                 required_missing.append(tr["vendor_support"])
             if q_vendor_hr is None:
@@ -530,7 +525,6 @@ with tab_survey:
                     "workload_deadlines_realistic": q_workload_deadlines,
                     "comp_fair": q_comp_fair,
                     "comp_benefits_satisfaction": q_comp_benefits,
-                    "vendor_communication": q_vendor_comm,
                     "vendor_support": q_vendor_support,
                     "vendor_hr_services": q_vendor_hr,
                     "vendor_text": q_vendor_text,
