@@ -16,7 +16,6 @@ create table exit_survey_responses (
 
     role_clarity int,
     role_tools int,
-    role_match int,
     role_text text,
 
     mgr_communication int,
@@ -33,7 +32,9 @@ create table exit_survey_responses (
     comp_benefits_satisfaction int,
 
     vendor_communication int,
+    vendor_support int,
     vendor_hr_services int,
+    vendor_text text,
 
     culture_respect int,
     culture_belonging int,
@@ -76,6 +77,8 @@ alter table survey_links enable row level security;
 -- alter table exit_survey_responses add column small_team text;
 -- alter table exit_survey_responses add column vendor_communication int;
 -- alter table exit_survey_responses add column vendor_hr_services int;
+-- alter table exit_survey_responses add column vendor_support int;
+-- alter table exit_survey_responses add column vendor_text text;
 
 -- Fields removed from the form (safe to leave the columns in
 -- place — they'll just stop receiving new data — or drop them
@@ -91,6 +94,7 @@ alter table survey_links enable row level security;
 -- alter table exit_survey_responses drop column if exists culture_values_alignment;
 -- alter table exit_survey_responses drop column if exists location_was_factor;
 -- alter table exit_survey_responses drop column if exists location_text;
+-- alter table exit_survey_responses drop column if exists role_match;
 
 -- New table for the admin link/deadline feature:
 -- create table survey_links (

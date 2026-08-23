@@ -1,3 +1,4 @@
+import os
 import secrets
 from datetime import datetime, time as dtime
 
@@ -66,7 +67,7 @@ def is_link_expired(link):
 
 
 SECTION_COLUMNS = {
-    "Role Clarity": ["role_clarity", "role_tools", "role_match"],
+    "Role Clarity": ["role_clarity", "role_tools"],
     "Manager": [
         "mgr_communication",
         "mgr_feedback",
@@ -79,7 +80,7 @@ SECTION_COLUMNS = {
         "workload_deadlines_realistic",
     ],
     "Compensation": ["comp_fair", "comp_benefits_satisfaction"],
-    "Vendor": ["vendor_communication", "vendor_hr_services"],
+    "Vendor": ["vendor_communication", "vendor_support", "vendor_hr_services"],
     "Culture": ["culture_respect", "culture_belonging"],
 }
 
@@ -164,7 +165,6 @@ T = {
         "s2_title": "Section 2: Role Clarity & Understanding",
         "role_clarity": "I had a clear understanding of what was expected of me in my role. *",
         "role_tools": "I had the tools, information, and training needed to do my job well. *",
-        "role_match": "My actual day-to-day work matched what was described when I was hired. *",
         "role_text": "Was there anything about your role that felt unclear or different from what you expected? *",
         "s3_title": "Section 3: Manager Relationship (Direct Manager)",
         "mgr_comm": "My direct manager communicated clearly and regularly with me. *",
@@ -181,7 +181,9 @@ T = {
         "comp_benefits": "I was satisfied with the medical insurance benefits offered. *",
         "s6b_title": "Section 6: Vendor Satisfaction",
         "vendor_comm": "I was satisfied with the communication with the vendor. *",
+        "vendor_support": "I always find it easy to get support and communicate with the vendor. *",
         "vendor_hr": "I was satisfied with the HR services provided by the vendor. *",
+        "vendor_text": "Any additional comments about your experience with the vendor? *",
         "s6_title": "Section 7: Culture & Environment",
         "culture_respect": "I felt respected and valued as an employee. *",
         "culture_belong": "I felt a sense of belonging on my team. *",
@@ -217,7 +219,6 @@ T = {
         "s2_title": "القسم 2: وضوح الدور والفهم",
         "role_clarity": "كان لدي فهم واضح لما هو متوقع مني في دوري. *",
         "role_tools": "كانت لدي الأدوات والمعلومات والتدريب اللازم للقيام بعملي بشكل جيد. *",
-        "role_match": "تطابق عملي اليومي الفعلي مع ما تم وصفه لي عند التعيين. *",
         "role_text": "هل كان هناك أي شيء في دورك شعرت أنه غير واضح أو مختلف عما توقعته؟ *",
         "s3_title": "القسم 3: العلاقة مع المدير المباشر",
         "mgr_comm": "كان مديري المباشر يتواصل معي بوضوح وبانتظام. *",
@@ -234,7 +235,9 @@ T = {
         "comp_benefits": "كنت راضيًا عن مزايا التأمين الطبي المقدمة. *",
         "s6b_title": "القسم 6: رضا المورد (Vendor)",
         "vendor_comm": "كنت راضيًا عن التواصل مع المورد (Vendor). *",
+        "vendor_support": "أجد دائمًا الدعم وأتواصل بسهولة مع المورد. *",
         "vendor_hr": "كنت راضيًا عن خدمات الموارد البشرية المقدمة من المورد. *",
+        "vendor_text": "هل لديك أي تعليقات إضافية حول تجربتك مع المورد؟ *",
         "s6_title": "القسم 7: الثقافة وبيئة العمل",
         "culture_respect": "شعرت بالاحترام والتقدير كموظف. *",
         "culture_belong": "شعرت بالانتماء إلى فريقي. *",
@@ -347,6 +350,10 @@ with tab_survey:
             link_blocked = True
             block_reason = "expired"
 
+    logo_path = "assets/51talk_logo.png"
+    if os.path.exists(logo_path):
+        st.image(logo_path, width=180)
+
     st.title(tr["title"])
     st.markdown(tr["intro"])
 
@@ -371,7 +378,6 @@ with tab_survey:
             st.subheader(tr["s2_title"])
             q_role_clarity = rating_question(tr["role_clarity"], "q_role_clarity", lang)
             q_role_tools = rating_question(tr["role_tools"], "q_role_tools", lang)
-            q_role_match = rating_question(tr["role_match"], "q_role_match", lang)
             q_role_text = st.text_area(tr["role_text"], key="q_role_text")
 
             st.divider()
@@ -396,7 +402,9 @@ with tab_survey:
             st.divider()
             st.subheader(tr["s6b_title"])
             q_vendor_comm = rating_question(tr["vendor_comm"], "q_vendor_comm", lang)
+            q_vendor_support = rating_question(tr["vendor_support"], "q_vendor_support", lang)
             q_vendor_hr = rating_question(tr["vendor_hr"], "q_vendor_hr", lang)
+            q_vendor_text = st.text_area(tr["vendor_text"], key="q_vendor_text")
 
             st.divider()
             st.subheader(tr["s6_title"])
@@ -446,8 +454,6 @@ with tab_survey:
                 required_missing.append(tr["role_clarity"])
             if q_role_tools is None:
                 required_missing.append(tr["role_tools"])
-            if q_role_match is None:
-                required_missing.append(tr["role_match"])
             if not q_role_text.strip():
                 required_missing.append(tr["role_text"])
 
@@ -476,8 +482,12 @@ with tab_survey:
 
             if q_vendor_comm is None:
                 required_missing.append(tr["vendor_comm"])
+            if q_vendor_support is None:
+                required_missing.append(tr["vendor_support"])
             if q_vendor_hr is None:
                 required_missing.append(tr["vendor_hr"])
+            if not q_vendor_text.strip():
+                required_missing.append(tr["vendor_text"])
 
             if q_culture_respect is None:
                 required_missing.append(tr["culture_respect"])
@@ -509,7 +519,6 @@ with tab_survey:
                     "link_token": token_param,
                     "role_clarity": q_role_clarity,
                     "role_tools": q_role_tools,
-                    "role_match": q_role_match,
                     "role_text": q_role_text,
                     "mgr_communication": q_mgr_comm,
                     "mgr_feedback": q_mgr_feedback,
@@ -522,7 +531,9 @@ with tab_survey:
                     "comp_fair": q_comp_fair,
                     "comp_benefits_satisfaction": q_comp_benefits,
                     "vendor_communication": q_vendor_comm,
+                    "vendor_support": q_vendor_support,
                     "vendor_hr_services": q_vendor_hr,
+                    "vendor_text": q_vendor_text,
                     "culture_respect": q_culture_respect,
                     "culture_belonging": q_culture_belong,
                     "culture_overall": q_culture_overall,
