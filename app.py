@@ -78,8 +78,9 @@ SECTION_COLUMNS = {
         "workload_life_balance",
         "workload_deadlines_realistic",
     ],
-    "Compensation": ["comp_fair", "comp_market_competitive", "comp_benefits_satisfaction"],
-    "Culture": ["culture_respect", "culture_belonging", "culture_values_alignment"],
+    "Compensation": ["comp_fair", "comp_benefits_satisfaction"],
+    "Vendor": ["vendor_communication", "vendor_hr_services"],
+    "Culture": ["culture_respect", "culture_belonging"],
 }
 
 # ============================================================
@@ -157,6 +158,7 @@ T = {
         "all_required": "All questions are required.",
         "s1_title": "Section 1: Background",
         "department": "Department *",
+        "small_team": "Small Team Name *",
         "crm": "CRM *",
         "job_title": "Job title *",
         "s2_title": "Section 2: Role Clarity & Understanding",
@@ -176,17 +178,15 @@ T = {
         "workload_deadlines": "My targets and KPIs were realistic and achievable. *",
         "s5_title": "Section 5: Compensation & Benefits",
         "comp_fair": "My salary was fair relative to my role and responsibilities. *",
-        "comp_market": "My salary was competitive compared to similar roles in the market. *",
-        "comp_benefits": "I was satisfied with the benefits offered (health, leave, etc.). *",
-        "s6_title": "Section 6: Culture & Environment",
+        "comp_benefits": "I was satisfied with the medical insurance benefits offered. *",
+        "s6b_title": "Section 6: Vendor Satisfaction",
+        "vendor_comm": "I was satisfied with the communication with the vendor. *",
+        "vendor_hr": "I was satisfied with the HR services provided by the vendor. *",
+        "s6_title": "Section 7: Culture & Environment",
         "culture_respect": "I felt respected and valued as an employee. *",
         "culture_belong": "I felt a sense of belonging on my team. *",
-        "culture_values": "Leadership's actions matched the company's stated values. *",
         "culture_overall": "I would describe the overall culture as: *",
         "culture_text": "Was there a specific culture or environment issue that influenced your decision to leave? *",
-        "s7_title": "Section 7: Work Location & Flexibility",
-        "location_factor": "Did work location/commute play a role in your decision to leave? *",
-        "location_text": "If yes, briefly explain: (required if yes above)",
         "s8_title": "Section 8: Overall & Wrap-Up",
         "primary_reason": "What is the primary reason you are leaving? *",
         "primary_reason_other": "If Other, please specify: (required if 'Other' selected above)",
@@ -211,6 +211,7 @@ T = {
         "all_required": "جميع الأسئلة إلزامية.",
         "s1_title": "القسم 1: المعلومات الأساسية",
         "department": "الإدارة *",
+        "small_team": "اسم الفريق الصغير *",
         "crm": "CRM *",
         "job_title": "المسمى الوظيفي *",
         "s2_title": "القسم 2: وضوح الدور والفهم",
@@ -230,17 +231,15 @@ T = {
         "workload_deadlines": "كانت أهدافي ومؤشرات الأداء الرئيسية (KPIs) واقعية وقابلة للتحقيق. *",
         "s5_title": "القسم 5: التعويضات والمزايا",
         "comp_fair": "كان راتبي عادلاً بالنسبة لدوري ومسؤولياتي. *",
-        "comp_market": "كان راتبي تنافسيًا مقارنة بالأدوار المماثلة في السوق. *",
-        "comp_benefits": "كنت راضيًا عن المزايا المقدمة (الصحية، الإجازات، إلخ). *",
-        "s6_title": "القسم 6: الثقافة وبيئة العمل",
+        "comp_benefits": "كنت راضيًا عن مزايا التأمين الطبي المقدمة. *",
+        "s6b_title": "القسم 6: رضا المورد (Vendor)",
+        "vendor_comm": "كنت راضيًا عن التواصل مع المورد (Vendor). *",
+        "vendor_hr": "كنت راضيًا عن خدمات الموارد البشرية المقدمة من المورد. *",
+        "s6_title": "القسم 7: الثقافة وبيئة العمل",
         "culture_respect": "شعرت بالاحترام والتقدير كموظف. *",
         "culture_belong": "شعرت بالانتماء إلى فريقي. *",
-        "culture_values": "تطابقت تصرفات القيادة مع القيم المعلنة للشركة. *",
         "culture_overall": "أصف الثقافة العامة بأنها: *",
         "culture_text": "هل كانت هناك مشكلة محددة تتعلق بالثقافة أو بيئة العمل أثرت على قرارك بالمغادرة؟ *",
-        "s7_title": "القسم 7: موقع العمل والمرونة",
-        "location_factor": "هل لعب موقع العمل / التنقل دورًا في قرارك بالمغادرة؟ *",
-        "location_text": "إذا كانت الإجابة نعم، يرجى التوضيح باختصار: (مطلوب إذا اخترت نعم أعلاه)",
         "s8_title": "القسم 8: الخلاصة العامة",
         "primary_reason": "ما هو السبب الرئيسي لمغادرتك؟ *",
         "primary_reason_other": "إذا اخترت 'أخرى'، يرجى التحديد: (مطلوب إذا تم اختيار 'أخرى' أعلاه)",
@@ -364,6 +363,7 @@ with tab_survey:
                 tr["department"],
                 ["", "SS-Kids", "SS-Adults", "CC& TMK", "Operations", "HR"],
             )
+            small_team = st.text_input(tr["small_team"])
             crm = st.text_input(tr["crm"])
             job_title = st.text_input(tr["job_title"])
 
@@ -391,27 +391,22 @@ with tab_survey:
             st.divider()
             st.subheader(tr["s5_title"])
             q_comp_fair = rating_question(tr["comp_fair"], "q_comp_fair", lang)
-            q_comp_market = rating_question(tr["comp_market"], "q_comp_market", lang)
             q_comp_benefits = rating_question(tr["comp_benefits"], "q_comp_benefits", lang)
+
+            st.divider()
+            st.subheader(tr["s6b_title"])
+            q_vendor_comm = rating_question(tr["vendor_comm"], "q_vendor_comm", lang)
+            q_vendor_hr = rating_question(tr["vendor_hr"], "q_vendor_hr", lang)
 
             st.divider()
             st.subheader(tr["s6_title"])
             q_culture_respect = rating_question(tr["culture_respect"], "q_culture_respect", lang)
             q_culture_belong = rating_question(tr["culture_belong"], "q_culture_belong", lang)
-            q_culture_values = rating_question(tr["culture_values"], "q_culture_values", lang)
             q_culture_overall = translated_choice(
                 tr["culture_overall"], "q_culture_overall", "culture_overall", lang,
                 values=["Very Positive", "Positive", "Neutral", "Negative", "Very Negative"],
             )
             q_culture_text = st.text_area(tr["culture_text"], key="q_culture_text")
-
-            st.divider()
-            st.subheader(tr["s7_title"])
-            q_location_factor = translated_choice(
-                tr["location_factor"], "q_location_factor", "yes_no", lang,
-                values=["Yes", "No"], horizontal=True,
-            )
-            q_location_text = st.text_area(tr["location_text"], key="q_location_text")
 
             st.divider()
             st.subheader(tr["s8_title"])
@@ -440,6 +435,8 @@ with tab_survey:
             required_missing = []
             if not department:
                 required_missing.append(tr["department"])
+            if not small_team.strip():
+                required_missing.append(tr["small_team"])
             if not crm.strip():
                 required_missing.append(tr["crm"])
             if not job_title.strip():
@@ -474,26 +471,22 @@ with tab_survey:
 
             if q_comp_fair is None:
                 required_missing.append(tr["comp_fair"])
-            if q_comp_market is None:
-                required_missing.append(tr["comp_market"])
             if q_comp_benefits is None:
                 required_missing.append(tr["comp_benefits"])
+
+            if q_vendor_comm is None:
+                required_missing.append(tr["vendor_comm"])
+            if q_vendor_hr is None:
+                required_missing.append(tr["vendor_hr"])
 
             if q_culture_respect is None:
                 required_missing.append(tr["culture_respect"])
             if q_culture_belong is None:
                 required_missing.append(tr["culture_belong"])
-            if q_culture_values is None:
-                required_missing.append(tr["culture_values"])
             if not q_culture_overall:
                 required_missing.append(tr["culture_overall"])
             if not q_culture_text.strip():
                 required_missing.append(tr["culture_text"])
-
-            if not q_location_factor:
-                required_missing.append(tr["location_factor"])
-            if q_location_factor == "Yes" and not q_location_text.strip():
-                required_missing.append(tr["location_text"])
 
             if not q_primary_reason:
                 required_missing.append(tr["primary_reason"])
@@ -509,6 +502,7 @@ with tab_survey:
             else:
                 response = {
                     "department": department,
+                    "small_team": small_team,
                     "crm": crm,
                     "job_title": job_title,
                     "survey_language": lang,
@@ -526,15 +520,13 @@ with tab_survey:
                     "workload_life_balance": q_workload_balance,
                     "workload_deadlines_realistic": q_workload_deadlines,
                     "comp_fair": q_comp_fair,
-                    "comp_market_competitive": q_comp_market,
                     "comp_benefits_satisfaction": q_comp_benefits,
+                    "vendor_communication": q_vendor_comm,
+                    "vendor_hr_services": q_vendor_hr,
                     "culture_respect": q_culture_respect,
                     "culture_belonging": q_culture_belong,
-                    "culture_values_alignment": q_culture_values,
                     "culture_overall": q_culture_overall,
                     "culture_text": q_culture_text,
-                    "location_was_factor": q_location_factor,
-                    "location_text": q_location_text,
                     "primary_reason": q_primary_reason,
                     "primary_reason_other": q_primary_reason_other,
                     "enps_recommend_0_10": q_enps,

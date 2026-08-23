@@ -8,6 +8,7 @@ create table exit_survey_responses (
     created_at timestamptz default now(),
 
     department text,
+    small_team text,
     crm text,
     job_title text,
     survey_language text,
@@ -29,17 +30,15 @@ create table exit_survey_responses (
     workload_deadlines_realistic int,
 
     comp_fair int,
-    comp_market_competitive int,
     comp_benefits_satisfaction int,
+
+    vendor_communication int,
+    vendor_hr_services int,
 
     culture_respect int,
     culture_belonging int,
-    culture_values_alignment int,
     culture_overall text,
     culture_text text,
-
-    location_was_factor text,
-    location_text text,
 
     primary_reason text,
     primary_reason_other text,
@@ -74,6 +73,9 @@ alter table survey_links enable row level security;
 -- alter table exit_survey_responses add column crm text;
 -- alter table exit_survey_responses add column survey_language text;
 -- alter table exit_survey_responses add column link_token text;
+-- alter table exit_survey_responses add column small_team text;
+-- alter table exit_survey_responses add column vendor_communication int;
+-- alter table exit_survey_responses add column vendor_hr_services int;
 
 -- Fields removed from the form (safe to leave the columns in
 -- place — they'll just stop receiving new data — or drop them
@@ -85,6 +87,10 @@ alter table survey_links enable row level security;
 -- alter table exit_survey_responses drop column if exists comp_was_factor;
 -- alter table exit_survey_responses drop column if exists location_fit;
 -- alter table exit_survey_responses drop column if exists retain_text;
+-- alter table exit_survey_responses drop column if exists comp_market_competitive;
+-- alter table exit_survey_responses drop column if exists culture_values_alignment;
+-- alter table exit_survey_responses drop column if exists location_was_factor;
+-- alter table exit_survey_responses drop column if exists location_text;
 
 -- New table for the admin link/deadline feature:
 -- create table survey_links (
