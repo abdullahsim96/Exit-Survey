@@ -156,22 +156,22 @@ T = {
             "helps us understand where we can improve. Responses are kept confidential and "
             "reviewed in aggregate. This should take about **5-10 minutes**."
         ),
-        "all_required": "All questions are required.",
+        "all_required": "Fields marked with * are required.",
         "s1_title": "Section 1: Background",
         "department": "Department *",
         "small_team": "Small Team Name *",
-        "crm": "CRM *",
+        "crm": "CRM",
         "job_title": "Job title *",
         "s2_title": "Section 2: Role Clarity & Understanding",
         "role_clarity": "I had a clear understanding of what was expected of me in my role. *",
         "role_tools": "I had the tools, information, and training needed to do my job well. *",
-        "role_text": "Was there anything about your role that felt unclear or different from what you expected? *",
+        "role_text": "Was there anything about your role that felt unclear or different from what you expected?",
         "s3_title": "Section 3: Manager Relationship (Direct Manager)",
         "mgr_comm": "My direct manager communicated clearly and regularly with me. *",
         "mgr_feedback": "My direct manager gave me useful, constructive feedback. *",
         "mgr_growth": "My direct manager supported my growth and development. *",
         "mgr_comfort": "I felt comfortable raising concerns or issues with my direct manager. *",
-        "mgr_text": "What, if anything, could your direct manager have done differently to support you better? *",
+        "mgr_text": "What, if anything, could your direct manager have done differently to support you better?",
         "s4_title": "Section 4: Workload",
         "workload_manageable": "My workload was manageable within normal working hours. *",
         "workload_balance": "I was able to maintain a healthy work-life balance. *",
@@ -182,18 +182,18 @@ T = {
         "s6b_title": "Section 6: Vendor Satisfaction",
         "vendor_support": "I always find it easy to get support and communicate with the vendor. *",
         "vendor_hr": "I was satisfied with the HR services provided by the vendor. *",
-        "vendor_text": "Any additional comments about your experience with the vendor? *",
+        "vendor_text": "Any additional comments about your experience with the vendor?",
         "s6_title": "Section 7: Culture & Environment",
         "culture_respect": "I felt respected and valued as an employee. *",
         "culture_belong": "I felt a sense of belonging on my team. *",
         "culture_overall": "I would describe the overall culture as: *",
-        "culture_text": "Was there a specific culture or environment issue that influenced your decision to leave? *",
+        "culture_text": "Was there a specific culture or environment issue that influenced your decision to leave?",
         "s8_title": "Section 8: Overall & Wrap-Up",
         "primary_reason": "What is the primary reason you are leaving? *",
-        "primary_reason_other": "If Other, please specify: (required if 'Other' selected above)",
+        "primary_reason_other": "If Other, please specify:",
         "enps": "Would you recommend this company as a place to work to a friend? (0 = Not at all, 10 = Definitely)",
         "return": "Would you consider returning to this company in the future? *",
-        "other_comments": "Any other comments or feedback you'd like to share? *",
+        "other_comments": "Any other comments or feedback you'd like to share?",
         "submit": "Submit Survey",
         "missing_prefix": "Please complete the following required fields before submitting: ",
         "success": "Thank you! Your response has been submitted.",
@@ -209,22 +209,22 @@ T = {
             "فهم النقاط التي يمكننا تحسينها. يتم الحفاظ على سرية الإجابات ومراجعتها بشكل "
             "إجمالي. يستغرق إكمال الاستبيان من **5 إلى 10 دقائق** تقريبًا."
         ),
-        "all_required": "جميع الأسئلة إلزامية.",
+        "all_required": "الحقول المميزة بـ * إلزامية.",
         "s1_title": "القسم 1: المعلومات الأساسية",
         "department": "الإدارة *",
         "small_team": "اسم الفريق الصغير *",
-        "crm": "CRM *",
+        "crm": "CRM",
         "job_title": "المسمى الوظيفي *",
         "s2_title": "القسم 2: وضوح الدور والفهم",
         "role_clarity": "كان لدي فهم واضح لما هو متوقع مني في دوري. *",
         "role_tools": "كانت لدي الأدوات والمعلومات والتدريب اللازم للقيام بعملي بشكل جيد. *",
-        "role_text": "هل كان هناك أي شيء في دورك شعرت أنه غير واضح أو مختلف عما توقعته؟ *",
+        "role_text": "هل كان هناك أي شيء في دورك شعرت أنه غير واضح أو مختلف عما توقعته؟",
         "s3_title": "القسم 3: العلاقة مع المدير المباشر",
         "mgr_comm": "كان مديري المباشر يتواصل معي بوضوح وبانتظام. *",
         "mgr_feedback": "قدم لي مديري المباشر ملاحظات مفيدة وبناءة. *",
         "mgr_growth": "دعم مديري المباشر نموي وتطوري المهني. *",
         "mgr_comfort": "شعرت بالارتياح لإثارة المخاوف أو المشكلات مع مديري المباشر. *",
-        "mgr_text": "ما الذي كان بإمكان مديرك المباشر القيام به بشكل مختلف لدعمك بشكل أفضل، إن وجد؟ *",
+        "mgr_text": "ما الذي كان بإمكان مديرك المباشر القيام به بشكل مختلف لدعمك بشكل أفضل، إن وجد؟",
         "s4_title": "القسم 4: عبء العمل",
         "workload_manageable": "كان عبء عملي يمكن التعامل معه ضمن ساعات العمل العادية. *",
         "workload_balance": "كنت قادرًا على الحفاظ على توازن صحي بين العمل والحياة. *",
@@ -235,18 +235,18 @@ T = {
         "s6b_title": "القسم 6: رضا المورد (Vendor)",
         "vendor_support": "أجد دائمًا الدعم وأتواصل بسهولة مع المورد. *",
         "vendor_hr": "كنت راضيًا عن خدمات الموارد البشرية المقدمة من المورد. *",
-        "vendor_text": "هل لديك أي تعليقات إضافية حول تجربتك مع المورد؟ *",
+        "vendor_text": "هل لديك أي تعليقات إضافية حول تجربتك مع المورد؟",
         "s6_title": "القسم 7: الثقافة وبيئة العمل",
         "culture_respect": "شعرت بالاحترام والتقدير كموظف. *",
         "culture_belong": "شعرت بالانتماء إلى فريقي. *",
         "culture_overall": "أصف الثقافة العامة بأنها: *",
-        "culture_text": "هل كانت هناك مشكلة محددة تتعلق بالثقافة أو بيئة العمل أثرت على قرارك بالمغادرة؟ *",
+        "culture_text": "هل كانت هناك مشكلة محددة تتعلق بالثقافة أو بيئة العمل أثرت على قرارك بالمغادرة؟",
         "s8_title": "القسم 8: الخلاصة العامة",
         "primary_reason": "ما هو السبب الرئيسي لمغادرتك؟ *",
-        "primary_reason_other": "إذا اخترت 'أخرى'، يرجى التحديد: (مطلوب إذا تم اختيار 'أخرى' أعلاه)",
+        "primary_reason_other": "إذا اخترت 'أخرى'، يرجى التحديد:",
         "enps": "هل توصي بهذه الشركة كمكان للعمل لصديق؟ (0 = إطلاقًا، 10 = بالتأكيد)",
         "return": "هل تفكر في العودة للعمل في هذه الشركة مستقبلاً؟ *",
-        "other_comments": "هل لديك أي تعليقات أو ملاحظات أخرى تود مشاركتها؟ *",
+        "other_comments": "هل لديك أي تعليقات أو ملاحظات أخرى تود مشاركتها؟",
         "submit": "إرسال الاستبيان",
         "missing_prefix": "يرجى إكمال الحقول المطلوبة التالية قبل الإرسال: ",
         "success": "شكرًا لك! تم إرسال إجابتك بنجاح.",
@@ -442,8 +442,6 @@ with tab_survey:
                 required_missing.append(tr["department"])
             if not small_team.strip():
                 required_missing.append(tr["small_team"])
-            if not crm.strip():
-                required_missing.append(tr["crm"])
             if not job_title.strip():
                 required_missing.append(tr["job_title"])
 
@@ -451,8 +449,6 @@ with tab_survey:
                 required_missing.append(tr["role_clarity"])
             if q_role_tools is None:
                 required_missing.append(tr["role_tools"])
-            if not q_role_text.strip():
-                required_missing.append(tr["role_text"])
 
             if q_mgr_comm is None:
                 required_missing.append(tr["mgr_comm"])
@@ -462,8 +458,6 @@ with tab_survey:
                 required_missing.append(tr["mgr_growth"])
             if q_mgr_comfort is None:
                 required_missing.append(tr["mgr_comfort"])
-            if not q_mgr_text.strip():
-                required_missing.append(tr["mgr_text"])
 
             if q_workload_manageable is None:
                 required_missing.append(tr["workload_manageable"])
@@ -481,8 +475,6 @@ with tab_survey:
                 required_missing.append(tr["vendor_support"])
             if q_vendor_hr is None:
                 required_missing.append(tr["vendor_hr"])
-            if not q_vendor_text.strip():
-                required_missing.append(tr["vendor_text"])
 
             if q_culture_respect is None:
                 required_missing.append(tr["culture_respect"])
@@ -490,17 +482,11 @@ with tab_survey:
                 required_missing.append(tr["culture_belong"])
             if not q_culture_overall:
                 required_missing.append(tr["culture_overall"])
-            if not q_culture_text.strip():
-                required_missing.append(tr["culture_text"])
 
             if not q_primary_reason:
                 required_missing.append(tr["primary_reason"])
-            if q_primary_reason == "Other" and not q_primary_reason_other.strip():
-                required_missing.append(tr["primary_reason_other"])
             if not q_return:
                 required_missing.append(tr["return"])
-            if not q_other_comments.strip():
-                required_missing.append(tr["other_comments"])
 
             if required_missing:
                 st.error(tr["missing_prefix"] + ", ".join(required_missing))
