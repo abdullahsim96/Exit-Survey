@@ -76,7 +76,6 @@ SECTION_COLUMNS = {
     ],
     "Workload": [
         "workload_manageable",
-        "workload_life_balance",
         "workload_deadlines_realistic",
     ],
     "Compensation": ["comp_fair", "comp_benefits_satisfaction"],
@@ -174,7 +173,6 @@ T = {
         "mgr_text": "What, if anything, could your direct manager have done differently to support you better?",
         "s4_title": "Section 4: Workload",
         "workload_manageable": "My workload was manageable within normal working hours. *",
-        "workload_balance": "I was able to maintain a healthy work-life balance. *",
         "workload_deadlines": "My targets and KPIs were realistic and achievable. *",
         "s5_title": "Section 5: Compensation & Benefits",
         "comp_fair": "My salary was fair relative to my role and responsibilities. *",
@@ -203,48 +201,47 @@ T = {
         "link_expired": "This survey link has expired or is no longer accepting responses. Please contact HR.",
     },
     "ar": {
-        "title": "📋 استبيان مقابلة إنهاء الخدمة",
+        "title": "📋 استبيان إنهاء الخدمة",
         "intro": (
-            "شكرًا لك على تخصيص وقتك لإكمال هذا الاستبيان. ملاحظاتك الصادقة تساعدنا على "
-            "فهم النقاط التي يمكننا تحسينها. يتم الحفاظ على سرية الإجابات ومراجعتها بشكل "
-            "إجمالي. يستغرق إكمال الاستبيان من **5 إلى 10 دقائق** تقريبًا."
+            "شكرًا لتخصيص وقتك لإكمال هذا الاستبيان. تساعدنا ملاحظاتك الصادقة على فهم "
+            "النقاط التي يمكننا تحسينها فيها. سيتم الحفاظ على سرية إجاباتك ومراجعتها بشكل "
+            "إجمالي فقط. يستغرق إكمال الاستبيان من **5 إلى 10 دقائق** تقريبًا."
         ),
-        "all_required": "الحقول المميزة بـ * إلزامية.",
+        "all_required": "الحقول المشار إليها بعلامة (*) إلزامية.",
         "s1_title": "القسم 1: المعلومات الأساسية",
         "department": "الإدارة *",
-        "small_team": "اسم الفريق الصغير *",
+        "small_team": "اسم الفريق (Small Team) *",
         "crm": "CRM",
         "job_title": "المسمى الوظيفي *",
         "s2_title": "القسم 2: وضوح الدور والفهم",
         "role_clarity": "كان لدي فهم واضح لما هو متوقع مني في دوري. *",
-        "role_tools": "كانت لدي الأدوات والمعلومات والتدريب اللازم للقيام بعملي بشكل جيد. *",
-        "role_text": "هل كان هناك أي شيء في دورك شعرت أنه غير واضح أو مختلف عما توقعته؟",
+        "role_tools": "توفرت لدي الأدوات والمعلومات والتدريب اللازم لأداء عملي بكفاءة. *",
+        "role_text": "هل كان هناك أي جانب من دورك شعرت أنه غير واضح أو مختلف عمّا توقعته؟",
         "s3_title": "القسم 3: العلاقة مع المدير المباشر",
         "mgr_comm": "كان مديري المباشر يتواصل معي بوضوح وبانتظام. *",
         "mgr_feedback": "قدم لي مديري المباشر ملاحظات مفيدة وبناءة. *",
-        "mgr_growth": "دعم مديري المباشر نموي وتطوري المهني. *",
-        "mgr_comfort": "شعرت بالارتياح لإثارة المخاوف أو المشكلات مع مديري المباشر. *",
-        "mgr_text": "ما الذي كان بإمكان مديرك المباشر القيام به بشكل مختلف لدعمك بشكل أفضل، إن وجد؟",
+        "mgr_growth": "دعمني مديري المباشر في نموي وتطوري المهني. *",
+        "mgr_comfort": "شعرت بالارتياح عند طرح المخاوف أو المشكلات على مديري المباشر. *",
+        "mgr_text": "ما الذي كان بإمكان مديرك المباشر فعله بشكل مختلف لدعمك على نحو أفضل، إن وجد؟",
         "s4_title": "القسم 4: عبء العمل",
-        "workload_manageable": "كان عبء عملي يمكن التعامل معه ضمن ساعات العمل العادية. *",
-        "workload_balance": "كنت قادرًا على الحفاظ على توازن صحي بين العمل والحياة. *",
+        "workload_manageable": "كان بإمكاني إنجاز عبء عملي ضمن ساعات العمل الرسمية. *",
         "workload_deadlines": "كانت أهدافي ومؤشرات الأداء الرئيسية (KPIs) واقعية وقابلة للتحقيق. *",
         "s5_title": "القسم 5: التعويضات والمزايا",
         "comp_fair": "كان راتبي عادلاً بالنسبة لدوري ومسؤولياتي. *",
         "comp_benefits": "كنت راضيًا عن مزايا التأمين الطبي المقدمة. *",
         "s6b_title": "القسم 6: رضا المورد (Vendor)",
-        "vendor_support": "أجد دائمًا الدعم وأتواصل بسهولة مع المورد. *",
+        "vendor_support": "أجد دائمًا الدعم اللازم وأتواصل بسهولة مع المورد (Vendor). *",
         "vendor_hr": "كنت راضيًا عن خدمات الموارد البشرية المقدمة من المورد. *",
         "vendor_text": "هل لديك أي تعليقات إضافية حول تجربتك مع المورد؟",
         "s6_title": "القسم 7: الثقافة وبيئة العمل",
         "culture_respect": "شعرت بالاحترام والتقدير كموظف. *",
         "culture_belong": "شعرت بالانتماء إلى فريقي. *",
-        "culture_overall": "أصف الثقافة العامة بأنها: *",
+        "culture_overall": "كيف تصف ثقافة الشركة بشكل عام؟ *",
         "culture_text": "هل كانت هناك مشكلة محددة تتعلق بالثقافة أو بيئة العمل أثرت على قرارك بالمغادرة؟",
         "s8_title": "القسم 8: الخلاصة العامة",
         "primary_reason": "ما هو السبب الرئيسي لمغادرتك؟ *",
         "primary_reason_other": "إذا اخترت 'أخرى'، يرجى التحديد:",
-        "enps": "هل توصي بهذه الشركة كمكان للعمل لصديق؟ (0 = إطلاقًا، 10 = بالتأكيد)",
+        "enps": "هل توصي بالعمل في هذه الشركة لأحد أصدقائك؟ (0 = مطلقًا، 10 = بالتأكيد)",
         "return": "هل تفكر في العودة للعمل في هذه الشركة مستقبلاً؟ *",
         "other_comments": "هل لديك أي تعليقات أو ملاحظات أخرى تود مشاركتها؟",
         "submit": "إرسال الاستبيان",
@@ -389,7 +386,6 @@ with tab_survey:
             st.divider()
             st.subheader(tr["s4_title"])
             q_workload_manageable = rating_question(tr["workload_manageable"], "q_workload_manageable", lang)
-            q_workload_balance = rating_question(tr["workload_balance"], "q_workload_balance", lang)
             q_workload_deadlines = rating_question(tr["workload_deadlines"], "q_workload_deadlines", lang)
 
             st.divider()
@@ -461,8 +457,6 @@ with tab_survey:
 
             if q_workload_manageable is None:
                 required_missing.append(tr["workload_manageable"])
-            if q_workload_balance is None:
-                required_missing.append(tr["workload_balance"])
             if q_workload_deadlines is None:
                 required_missing.append(tr["workload_deadlines"])
 
@@ -507,7 +501,6 @@ with tab_survey:
                     "mgr_comfort_raising_concerns": q_mgr_comfort,
                     "mgr_text": q_mgr_text,
                     "workload_manageable": q_workload_manageable,
-                    "workload_life_balance": q_workload_balance,
                     "workload_deadlines_realistic": q_workload_deadlines,
                     "comp_fair": q_comp_fair,
                     "comp_benefits_satisfaction": q_comp_benefits,

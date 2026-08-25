@@ -96,6 +96,7 @@ alter table survey_links enable row level security;
 -- alter table exit_survey_responses drop column if exists location_text;
 -- alter table exit_survey_responses drop column if exists role_match;
 -- alter table exit_survey_responses drop column if exists vendor_communication;
+-- alter table exit_survey_responses drop column if exists workload_life_balance;
 
 -- New table for the admin link/deadline feature:
 -- create table survey_links (
