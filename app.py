@@ -67,7 +67,7 @@ def is_link_expired(link):
 
 
 SECTION_COLUMNS = {
-    "Role Clarity": ["role_clarity", "role_tools"],
+    "Role Clarity": ["role_clarity", "role_tools", "role_onboard_training", "role_ongoing_training"],
     "Manager": [
         "mgr_communication",
         "mgr_feedback",
@@ -75,7 +75,6 @@ SECTION_COLUMNS = {
         "mgr_comfort_raising_concerns",
     ],
     "Tasks & Targets": [
-        "workload_manageable",
         "workload_deadlines_realistic",
     ],
     "Compensation": ["comp_fair", "comp_benefits_satisfaction"],
@@ -145,6 +144,10 @@ OPT = {
         "en": {"Yes": "Yes", "Maybe": "Maybe", "No": "No"},
         "ar": {"Yes": "نعم", "Maybe": "ربما", "No": "لا"},
     },
+    "recommend": {
+        "en": {"Recommend": "Recommend", "Not recommend": "Not recommend", "Prefer not to say": "Prefer not to say"},
+        "ar": {"Recommend": "أوصي", "Not recommend": "لا أوصي", "Prefer not to say": "أفضّل عدم الإفصاح"},
+    },
 }
 
 T = {
@@ -161,9 +164,12 @@ T = {
         "small_team": "Small Team Name *",
         "crm": "CRM",
         "job_title": "Job title *",
-        "s2_title": "Section 2: Role Clarity & Understanding",
+        "s2_title": "Section 2: Role Clarity & Tasks",
         "role_clarity": "I had a clear understanding of what was expected of me in my role. *",
-        "role_tools": "I had the tools, information, and training needed to do my job well. *",
+        "role_tools": "I had the tools and information needed to do my job well. *",
+        "role_onboard_training": "I received adequate training during my onboarding to prepare me for my role. *",
+        "role_ongoing_training": "I received the ongoing on-the-job training I needed to perform my role well. *",
+        "workload_deadlines": "I always knew the targets required of me and my rate of achievement toward them each month. *",
         "role_text": "Was there anything about your role that felt unclear or different from what you expected?",
         "s3_title": "Section 3: Manager Relationship (Direct Manager)",
         "mgr_comm": "My direct manager communicated clearly and regularly with me. *",
@@ -171,25 +177,22 @@ T = {
         "mgr_growth": "My direct manager supported my growth and development. *",
         "mgr_comfort": "I felt comfortable raising concerns or issues with my direct manager. *",
         "mgr_text": "What, if anything, could your direct manager have done differently to support you better?",
-        "s4_title": "Section 4: Tasks & Targets",
-        "workload_manageable": "My workload was manageable within normal working hours. *",
-        "workload_deadlines": "I always knew the targets required of me and my rate of achievement toward them each month. *",
-        "s5_title": "Section 5: Compensation & Benefits",
+        "s5_title": "Section 4: Compensation & Benefits",
         "comp_fair": "My salary was fair relative to my role and responsibilities. *",
         "comp_benefits": "I was satisfied with the medical insurance benefits offered. *",
-        "s6b_title": "Section 6: Vendor Satisfaction",
+        "s6b_title": "Section 5: Vendor Satisfaction",
         "vendor_support": "I always find it easy to get support and communicate with the vendor. *",
         "vendor_hr": "I was satisfied with the HR services provided by the vendor. *",
         "vendor_text": "Any additional comments about your experience with the vendor?",
-        "s6_title": "Section 7: Culture & Environment",
+        "s6_title": "Section 6: Culture & Environment",
         "culture_respect": "I felt respected and valued as an employee. *",
         "culture_belong": "I felt a sense of belonging on my team. *",
         "culture_overall": "I would describe the overall culture as: *",
         "culture_text": "Was there a specific culture or environment issue that influenced your decision to leave?",
-        "s8_title": "Section 8: Overall & Wrap-Up",
+        "s8_title": "Section 7: Overall & Wrap-Up",
         "primary_reason": "What is the primary reason you are leaving? *",
         "primary_reason_other": "If Other, please specify:",
-        "enps": "Would you recommend this company as a place to work to a friend? (0 = Not at all, 10 = Definitely)",
+        "enps": "Would you recommend this company as a place to work to a friend? *",
         "return": "Would you consider returning to this company in the future? *",
         "other_comments": "Any other comments or feedback you'd like to share?",
         "submit": "Submit Survey",
@@ -213,9 +216,12 @@ T = {
         "small_team": "اسم الفريق (Small Team) *",
         "crm": "CRM",
         "job_title": "المسمى الوظيفي *",
-        "s2_title": "القسم 2: وضوح الدور والفهم",
+        "s2_title": "القسم 2: وضوح الدور والمهام",
         "role_clarity": "كان لدي فهم واضح لما هو متوقع مني في دوري. *",
-        "role_tools": "توفرت لدي الأدوات والمعلومات والتدريب اللازم لأداء عملي بكفاءة. *",
+        "role_tools": "توفرت لدي الأدوات والمعلومات اللازمة لأداء عملي بكفاءة. *",
+        "role_onboard_training": "تلقيت تدريبًا كافيًا خلال فترة التهيئة (Onboarding) أعدّني للقيام بدوري. *",
+        "role_ongoing_training": "تلقيت التدريب المستمر أثناء العمل الذي احتجته لأداء دوري بشكل جيد. *",
+        "workload_deadlines": "كنت دائمًا على معرفة بالأهداف المطلوبة مني ونسبة تحقيقي لها خلال الشهر. *",
         "role_text": "هل كان هناك أي جانب من دورك شعرت أنه غير واضح أو مختلف عمّا توقعته؟",
         "s3_title": "القسم 3: العلاقة مع المدير المباشر",
         "mgr_comm": "كان مديري المباشر يتواصل معي بوضوح وبانتظام. *",
@@ -223,25 +229,22 @@ T = {
         "mgr_growth": "دعمني مديري المباشر في نموي وتطوري المهني. *",
         "mgr_comfort": "شعرت بالارتياح عند طرح المخاوف أو المشكلات على مديري المباشر. *",
         "mgr_text": "ما الذي كان بإمكان مديرك المباشر فعله بشكل مختلف لدعمك على نحو أفضل، إن وجد؟",
-        "s4_title": "القسم 4: المهام والأهداف",
-        "workload_manageable": "كان بإمكاني إنجاز عبء عملي ضمن ساعات العمل الرسمية. *",
-        "workload_deadlines": "كنت دائمًا على معرفة بالأهداف المطلوبة مني ونسبة تحقيقي لها خلال الشهر. *",
-        "s5_title": "القسم 5: التعويضات والمزايا",
+        "s5_title": "القسم 4: التعويضات والمزايا",
         "comp_fair": "كان راتبي عادلاً بالنسبة لدوري ومسؤولياتي. *",
         "comp_benefits": "كنت راضيًا عن مزايا التأمين الطبي المقدمة. *",
-        "s6b_title": "القسم 6: رضا المورد (Vendor)",
+        "s6b_title": "القسم 5: رضا المورد (Vendor)",
         "vendor_support": "أجد دائمًا الدعم اللازم وأتواصل بسهولة مع المورد (Vendor). *",
         "vendor_hr": "كنت راضيًا عن خدمات الموارد البشرية المقدمة من المورد. *",
         "vendor_text": "هل لديك أي تعليقات إضافية حول تجربتك مع المورد؟",
-        "s6_title": "القسم 7: الثقافة وبيئة العمل",
+        "s6_title": "القسم 6: الثقافة وبيئة العمل",
         "culture_respect": "شعرت بالاحترام والتقدير كموظف. *",
         "culture_belong": "شعرت بالانتماء إلى فريقي. *",
         "culture_overall": "كيف تصف ثقافة الشركة بشكل عام؟ *",
         "culture_text": "هل كانت هناك مشكلة محددة تتعلق بالثقافة أو بيئة العمل أثرت على قرارك بالمغادرة؟",
-        "s8_title": "القسم 8: الخلاصة العامة",
+        "s8_title": "القسم 7: الخلاصة العامة",
         "primary_reason": "ما هو السبب الرئيسي لمغادرتك؟ *",
         "primary_reason_other": "إذا اخترت 'أخرى'، يرجى التحديد:",
-        "enps": "هل توصي بالعمل في هذه الشركة لأحد أصدقائك؟ (0 = مطلقًا، 10 = بالتأكيد)",
+        "enps": "هل توصي بالعمل في هذه الشركة لأحد أصدقائك؟ *",
         "return": "هل تفكر في العودة للعمل في هذه الشركة مستقبلاً؟ *",
         "other_comments": "هل لديك أي تعليقات أو ملاحظات أخرى تود مشاركتها؟",
         "submit": "إرسال الاستبيان",
@@ -373,6 +376,9 @@ with tab_survey:
             st.subheader(tr["s2_title"])
             q_role_clarity = rating_question(tr["role_clarity"], "q_role_clarity", lang)
             q_role_tools = rating_question(tr["role_tools"], "q_role_tools", lang)
+            q_role_onboard_training = rating_question(tr["role_onboard_training"], "q_role_onboard_training", lang)
+            q_role_ongoing_training = rating_question(tr["role_ongoing_training"], "q_role_ongoing_training", lang)
+            q_workload_deadlines = rating_question(tr["workload_deadlines"], "q_workload_deadlines", lang)
             q_role_text = st.text_area(tr["role_text"], key="q_role_text")
 
             st.divider()
@@ -382,11 +388,6 @@ with tab_survey:
             q_mgr_growth = rating_question(tr["mgr_growth"], "q_mgr_growth", lang)
             q_mgr_comfort = rating_question(tr["mgr_comfort"], "q_mgr_comfort", lang)
             q_mgr_text = st.text_area(tr["mgr_text"], key="q_mgr_text")
-
-            st.divider()
-            st.subheader(tr["s4_title"])
-            q_workload_manageable = rating_question(tr["workload_manageable"], "q_workload_manageable", lang)
-            q_workload_deadlines = rating_question(tr["workload_deadlines"], "q_workload_deadlines", lang)
 
             st.divider()
             st.subheader(tr["s5_title"])
@@ -423,7 +424,10 @@ with tab_survey:
                 format_func=lambda v: reason_labels.get(v, v) if v else "",
             )
             q_primary_reason_other = st.text_input(tr["primary_reason_other"], key="q_primary_reason_other")
-            q_enps = st.slider(tr["enps"], min_value=0, max_value=10, value=5, key="q_enps")
+            q_enps = translated_choice(
+                tr["enps"], "q_enps", "recommend", lang,
+                values=["Recommend", "Not recommend", "Prefer not to say"], horizontal=True,
+            )
             q_return = translated_choice(
                 tr["return"], "q_return", "return", lang,
                 values=["Yes", "Maybe", "No"], horizontal=True,
@@ -445,6 +449,10 @@ with tab_survey:
                 required_missing.append(tr["role_clarity"])
             if q_role_tools is None:
                 required_missing.append(tr["role_tools"])
+            if q_role_onboard_training is None:
+                required_missing.append(tr["role_onboard_training"])
+            if q_role_ongoing_training is None:
+                required_missing.append(tr["role_ongoing_training"])
 
             if q_mgr_comm is None:
                 required_missing.append(tr["mgr_comm"])
@@ -455,8 +463,6 @@ with tab_survey:
             if q_mgr_comfort is None:
                 required_missing.append(tr["mgr_comfort"])
 
-            if q_workload_manageable is None:
-                required_missing.append(tr["workload_manageable"])
             if q_workload_deadlines is None:
                 required_missing.append(tr["workload_deadlines"])
 
@@ -479,6 +485,8 @@ with tab_survey:
 
             if not q_primary_reason:
                 required_missing.append(tr["primary_reason"])
+            if not q_enps:
+                required_missing.append(tr["enps"])
             if not q_return:
                 required_missing.append(tr["return"])
 
@@ -494,13 +502,14 @@ with tab_survey:
                     "link_token": token_param,
                     "role_clarity": q_role_clarity,
                     "role_tools": q_role_tools,
+                    "role_onboard_training": q_role_onboard_training,
+                    "role_ongoing_training": q_role_ongoing_training,
                     "role_text": q_role_text,
                     "mgr_communication": q_mgr_comm,
                     "mgr_feedback": q_mgr_feedback,
                     "mgr_growth_support": q_mgr_growth,
                     "mgr_comfort_raising_concerns": q_mgr_comfort,
                     "mgr_text": q_mgr_text,
-                    "workload_manageable": q_workload_manageable,
                     "workload_deadlines_realistic": q_workload_deadlines,
                     "comp_fair": q_comp_fair,
                     "comp_benefits_satisfaction": q_comp_benefits,
@@ -513,7 +522,7 @@ with tab_survey:
                     "culture_text": q_culture_text,
                     "primary_reason": q_primary_reason,
                     "primary_reason_other": q_primary_reason_other,
-                    "enps_recommend_0_10": q_enps,
+                    "would_recommend": q_enps,
                     "would_return": q_return,
                     "other_comments": q_other_comments,
                 }
@@ -551,8 +560,15 @@ with tab_dashboard:
 
             col1, col2, col3 = st.columns(3)
             col1.metric("Total responses", len(df))
-            avg_enps = df["enps_recommend_0_10"].mean()
-            col2.metric("Avg. eNPS (0-10)", f"{avg_enps:.1f}" if pd.notna(avg_enps) else "N/A")
+            if "would_recommend" in df.columns and df["would_recommend"].notna().sum() > 0:
+                answered = df[df["would_recommend"] != "Prefer not to say"]
+                pct_recommend = (
+                    (answered["would_recommend"] == "Recommend").sum() / len(answered) * 100
+                    if len(answered) > 0 else 0
+                )
+                col2.metric("Would recommend", f"{pct_recommend:.0f}%")
+            else:
+                col2.metric("Would recommend", "N/A")
             pct_return = (
                 (df["would_return"] == "Yes").sum() / df["would_return"].notna().sum() * 100
                 if df["would_return"].notna().sum() > 0

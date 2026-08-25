@@ -16,6 +16,8 @@ create table exit_survey_responses (
 
     role_clarity int,
     role_tools int,
+    role_onboard_training int,
+    role_ongoing_training int,
     role_text text,
 
     mgr_communication int,
@@ -24,14 +26,11 @@ create table exit_survey_responses (
     mgr_comfort_raising_concerns int,
     mgr_text text,
 
-    workload_manageable int,
-    workload_life_balance int,
     workload_deadlines_realistic int,
 
     comp_fair int,
     comp_benefits_satisfaction int,
 
-    vendor_communication int,
     vendor_support int,
     vendor_hr_services int,
     vendor_text text,
@@ -43,7 +42,7 @@ create table exit_survey_responses (
 
     primary_reason text,
     primary_reason_other text,
-    enps_recommend_0_10 int,
+    would_recommend text,
     would_return text,
     other_comments text
 );
@@ -79,6 +78,9 @@ alter table survey_links enable row level security;
 -- alter table exit_survey_responses add column vendor_hr_services int;
 -- alter table exit_survey_responses add column vendor_support int;
 -- alter table exit_survey_responses add column vendor_text text;
+-- alter table exit_survey_responses add column role_onboard_training int;
+-- alter table exit_survey_responses add column role_ongoing_training int;
+-- alter table exit_survey_responses add column would_recommend text;
 
 -- Fields removed from the form (safe to leave the columns in
 -- place — they'll just stop receiving new data — or drop them
@@ -97,6 +99,8 @@ alter table survey_links enable row level security;
 -- alter table exit_survey_responses drop column if exists role_match;
 -- alter table exit_survey_responses drop column if exists vendor_communication;
 -- alter table exit_survey_responses drop column if exists workload_life_balance;
+-- alter table exit_survey_responses drop column if exists workload_manageable;
+-- alter table exit_survey_responses drop column if exists enps_recommend_0_10;
 
 -- New table for the admin link/deadline feature:
 -- create table survey_links (
