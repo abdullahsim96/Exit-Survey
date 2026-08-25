@@ -67,15 +67,13 @@ def is_link_expired(link):
 
 
 SECTION_COLUMNS = {
-    "Role Clarity": ["role_clarity", "role_tools", "role_onboard_training", "role_ongoing_training"],
+    "Role Clarity": ["role_clarity", "role_tools", "workload_deadlines_realistic"],
+    "Training": ["role_onboard_training", "role_ongoing_training"],
     "Manager": [
         "mgr_communication",
         "mgr_feedback",
         "mgr_growth_support",
         "mgr_comfort_raising_concerns",
-    ],
-    "Tasks & Targets": [
-        "workload_deadlines_realistic",
     ],
     "Compensation": ["comp_fair", "comp_benefits_satisfaction"],
     "Vendor": ["vendor_support", "vendor_hr_services"],
@@ -164,32 +162,33 @@ T = {
         "small_team": "Small Team Name *",
         "crm": "CRM",
         "job_title": "Job title *",
-        "s2_title": "Section 2: Role Clarity & Tasks",
+        "s2_title": "Section 2: Role Clarity",
         "role_clarity": "I had a clear understanding of what was expected of me in my role. *",
         "role_tools": "I had the tools and information needed to do my job well. *",
-        "role_onboard_training": "I received adequate training during my onboarding to prepare me for my role. *",
-        "role_ongoing_training": "I received the ongoing on-the-job training I needed to perform my role well. *",
         "workload_deadlines": "I always knew the targets required of me and my rate of achievement toward them each month. *",
         "role_text": "Was there anything about your role that felt unclear or different from what you expected?",
-        "s3_title": "Section 3: Manager Relationship (Direct Manager)",
+        "s2b_title": "Section 3: Training & Development",
+        "role_onboard_training": "I received adequate training during my onboarding to prepare me for my role. *",
+        "role_ongoing_training": "I received the ongoing on-the-job training I needed to perform my role well. *",
+        "s3_title": "Section 4: Manager Relationship (Direct Manager)",
         "mgr_comm": "My direct manager communicated clearly and regularly with me. *",
         "mgr_feedback": "My direct manager gave me useful, constructive feedback. *",
         "mgr_growth": "My direct manager supported my growth and development. *",
         "mgr_comfort": "I felt comfortable raising concerns or issues with my direct manager. *",
         "mgr_text": "What, if anything, could your direct manager have done differently to support you better?",
-        "s5_title": "Section 4: Compensation & Benefits",
+        "s5_title": "Section 5: Compensation & Benefits",
         "comp_fair": "My salary was fair relative to my role and responsibilities. *",
         "comp_benefits": "I was satisfied with the medical insurance benefits offered. *",
-        "s6b_title": "Section 5: Vendor Satisfaction",
+        "s6b_title": "Section 6: Vendor Satisfaction",
         "vendor_support": "I always find it easy to get support and communicate with the vendor. *",
         "vendor_hr": "I was satisfied with the HR services provided by the vendor. *",
         "vendor_text": "Any additional comments about your experience with the vendor?",
-        "s6_title": "Section 6: Culture & Environment",
+        "s6_title": "Section 7: Culture & Environment",
         "culture_respect": "I felt respected and valued as an employee. *",
         "culture_belong": "I felt a sense of belonging on my team. *",
         "culture_overall": "I would describe the overall culture as: *",
         "culture_text": "Was there a specific culture or environment issue that influenced your decision to leave?",
-        "s8_title": "Section 7: Overall & Wrap-Up",
+        "s8_title": "Section 8: Overall & Wrap-Up",
         "primary_reason": "What is the primary reason you are leaving? *",
         "primary_reason_other": "If Other, please specify:",
         "enps": "Would you recommend this company as a place to work to a friend? *",
@@ -216,32 +215,33 @@ T = {
         "small_team": "اسم الفريق (Small Team) *",
         "crm": "CRM",
         "job_title": "المسمى الوظيفي *",
-        "s2_title": "القسم 2: وضوح الدور والمهام",
+        "s2_title": "القسم 2: وضوح الدور",
         "role_clarity": "كان لدي فهم واضح لما هو متوقع مني في دوري. *",
         "role_tools": "توفرت لدي الأدوات والمعلومات اللازمة لأداء عملي بكفاءة. *",
-        "role_onboard_training": "تلقيت تدريبًا كافيًا خلال فترة التهيئة (Onboarding) أعدّني للقيام بدوري. *",
-        "role_ongoing_training": "تلقيت التدريب المستمر أثناء العمل الذي احتجته لأداء دوري بشكل جيد. *",
         "workload_deadlines": "كنت دائمًا على معرفة بالأهداف المطلوبة مني ونسبة تحقيقي لها خلال الشهر. *",
         "role_text": "هل كان هناك أي جانب من دورك شعرت أنه غير واضح أو مختلف عمّا توقعته؟",
-        "s3_title": "القسم 3: العلاقة مع المدير المباشر",
+        "s2b_title": "القسم 3: التدريب والتطوير",
+        "role_onboard_training": "تلقيت تدريبًا كافيًا خلال فترة التهيئة (Onboarding) أعدّني للقيام بدوري. *",
+        "role_ongoing_training": "تلقيت التدريب المستمر أثناء العمل الذي احتجته لأداء دوري بشكل جيد. *",
+        "s3_title": "القسم 4: العلاقة مع المدير المباشر",
         "mgr_comm": "كان مديري المباشر يتواصل معي بوضوح وبانتظام. *",
         "mgr_feedback": "قدم لي مديري المباشر ملاحظات مفيدة وبناءة. *",
         "mgr_growth": "دعمني مديري المباشر في نموي وتطوري المهني. *",
         "mgr_comfort": "شعرت بالارتياح عند طرح المخاوف أو المشكلات على مديري المباشر. *",
         "mgr_text": "ما الذي كان بإمكان مديرك المباشر فعله بشكل مختلف لدعمك على نحو أفضل، إن وجد؟",
-        "s5_title": "القسم 4: التعويضات والمزايا",
+        "s5_title": "القسم 5: التعويضات والمزايا",
         "comp_fair": "كان راتبي عادلاً بالنسبة لدوري ومسؤولياتي. *",
         "comp_benefits": "كنت راضيًا عن مزايا التأمين الطبي المقدمة. *",
-        "s6b_title": "القسم 5: رضا المورد (Vendor)",
+        "s6b_title": "القسم 6: رضا المورد (Vendor)",
         "vendor_support": "أجد دائمًا الدعم اللازم وأتواصل بسهولة مع المورد (Vendor). *",
         "vendor_hr": "كنت راضيًا عن خدمات الموارد البشرية المقدمة من المورد. *",
         "vendor_text": "هل لديك أي تعليقات إضافية حول تجربتك مع المورد؟",
-        "s6_title": "القسم 6: الثقافة وبيئة العمل",
+        "s6_title": "القسم 7: الثقافة وبيئة العمل",
         "culture_respect": "شعرت بالاحترام والتقدير كموظف. *",
         "culture_belong": "شعرت بالانتماء إلى فريقي. *",
         "culture_overall": "كيف تصف ثقافة الشركة بشكل عام؟ *",
         "culture_text": "هل كانت هناك مشكلة محددة تتعلق بالثقافة أو بيئة العمل أثرت على قرارك بالمغادرة؟",
-        "s8_title": "القسم 7: الخلاصة العامة",
+        "s8_title": "القسم 8: الخلاصة العامة",
         "primary_reason": "ما هو السبب الرئيسي لمغادرتك؟ *",
         "primary_reason_other": "إذا اخترت 'أخرى'، يرجى التحديد:",
         "enps": "هل توصي بالعمل في هذه الشركة لأحد أصدقائك؟ *",
@@ -376,10 +376,13 @@ with tab_survey:
             st.subheader(tr["s2_title"])
             q_role_clarity = rating_question(tr["role_clarity"], "q_role_clarity", lang)
             q_role_tools = rating_question(tr["role_tools"], "q_role_tools", lang)
-            q_role_onboard_training = rating_question(tr["role_onboard_training"], "q_role_onboard_training", lang)
-            q_role_ongoing_training = rating_question(tr["role_ongoing_training"], "q_role_ongoing_training", lang)
             q_workload_deadlines = rating_question(tr["workload_deadlines"], "q_workload_deadlines", lang)
             q_role_text = st.text_area(tr["role_text"], key="q_role_text")
+
+            st.divider()
+            st.subheader(tr["s2b_title"])
+            q_role_onboard_training = rating_question(tr["role_onboard_training"], "q_role_onboard_training", lang)
+            q_role_ongoing_training = rating_question(tr["role_ongoing_training"], "q_role_ongoing_training", lang)
 
             st.divider()
             st.subheader(tr["s3_title"])
