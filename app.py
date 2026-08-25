@@ -203,7 +203,7 @@ T = {
         "link_expired": "This survey link has expired or is no longer accepting responses. Please contact HR.",
     },
     "ar": {
-        "title": "📋 استبيان إنهاء الخدمة",
+        "title": "📋 Employee Exit Survey",
         "intro": (
             "شكرًا لتخصيص وقتك لإكمال هذا الاستبيان. تساعدنا ملاحظاتك الصادقة على فهم "
             "النقاط التي يمكننا تحسينها فيها. سيتم الحفاظ على سرية إجاباتك ومراجعتها بشكل "
@@ -352,7 +352,8 @@ with tab_survey:
     if os.path.exists(logo_path):
         st.image(logo_path, width=180)
 
-    st.title(tr["title"])
+    if lang == "en":
+        st.title(tr["title"])
     st.markdown(tr["intro"])
 
     if link_blocked:
