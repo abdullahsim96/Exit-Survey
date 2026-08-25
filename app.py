@@ -25,7 +25,7 @@ st.markdown(
     .stRadio label, .stSelectbox label, .stTextInput label, .stTextArea label,
     .stMultiSelect label, .stDateInput label, .stSlider label {
         font-size: 1.05rem !important;
-        font-weight: 500;
+        font-weight: 700;
     }
     .stRadio div[role="radiogroup"] label p { font-size: 1rem !important; }
     .stButton button, .stFormSubmitButton button, .stDownloadButton button {
@@ -379,10 +379,15 @@ with tab_survey:
 
     logo_path = "assets/51talk_logo.png"
     if os.path.exists(logo_path):
-        st.image(logo_path, width=180)
+        logo_col1, logo_col2, logo_col3 = st.columns([1, 1, 1])
+        with logo_col2:
+            st.image(logo_path, width=180)
 
     if lang == "en":
-        st.title(tr["title"])
+        st.markdown(
+            f"<h1 style='text-align:center; font-size:3rem; margin-bottom:0.5rem;'>{tr['title']}</h1>",
+            unsafe_allow_html=True,
+        )
     st.markdown(tr["intro"])
 
     if link_blocked:
