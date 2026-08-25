@@ -35,6 +35,42 @@ st.markdown(
     div[data-testid="stMetricValue"] { font-size: 2rem !important; }
     div[data-testid="stMetricLabel"] { font-size: 1rem !important; }
     .stDataFrame { font-size: 0.95rem !important; }
+
+    /* Section header styling — colored accent bar, tinted background */
+    h3 {
+        border-left: 5px solid #0061FC !important;
+        background: linear-gradient(90deg, #F0F6FF 0%, rgba(240,246,255,0) 100%);
+        padding: 0.6rem 0.9rem !important;
+        border-radius: 6px;
+        margin-top: 2rem !important;
+    }
+
+    /* Submit button — brand blue, rounded, subtle shadow */
+    .stFormSubmitButton button {
+        background-color: #0061FC !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0, 97, 252, 0.25);
+        transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .stFormSubmitButton button:hover {
+        box-shadow: 0 4px 12px rgba(0, 97, 252, 0.35);
+        transform: translateY(-1px);
+    }
+
+    /* Selected radio option pill highlight */
+    .stRadio div[role="radiogroup"] label[data-baseweb="radio"]:has(input:checked) {
+        background: #F0F6FF;
+        border-radius: 6px;
+    }
+
+    /* Text inputs / areas — softer border, rounded corners */
+    .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] {
+        border-radius: 8px !important;
+    }
+
+    hr { margin: 1.8rem 0 !important; opacity: 0.15; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -379,15 +415,21 @@ with tab_survey:
 
     logo_path = "assets/51talk_logo.png"
     if os.path.exists(logo_path):
-        logo_col1, logo_col2, logo_col3 = st.columns([1, 1, 1])
-        with logo_col2:
-            st.image(logo_path, width=180)
-
-    if lang == "en":
+        header_logo_col, header_title_col = st.columns([1, 3])
+        with header_logo_col:
+            st.image(logo_path, width=150)
+        with header_title_col:
+            if lang == "en":
+                st.markdown(
+                    f"<h1 style='text-align:left; margin-top:0.8rem; margin-bottom:0;'>{tr['title']}</h1>",
+                    unsafe_allow_html=True,
+                )
+    elif lang == "en":
         st.markdown(
-            f"<h1 style='text-align:center; font-size:3rem; margin-bottom:0.5rem;'>{tr['title']}</h1>",
+            f"<h1 style='text-align:left; margin-bottom:0;'>{tr['title']}</h1>",
             unsafe_allow_html=True,
         )
+
     st.markdown(tr["intro"])
 
     if link_blocked:
