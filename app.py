@@ -427,18 +427,13 @@ with tab_survey:
 
     logo_path = "assets/51talk_logo.png"
     if os.path.exists(logo_path):
-        header_logo_col, header_title_col = st.columns([1, 3])
-        with header_logo_col:
-            st.image(logo_path, width=150)
-        with header_title_col:
-            if lang == "en":
-                st.markdown(
-                    f"<h1 style='text-align:left; margin-top:0.8rem; margin-bottom:0;'>{tr['title']}</h1>",
-                    unsafe_allow_html=True,
-                )
-    elif lang == "en":
+        logo_col1, logo_col2, logo_col3 = st.columns([1, 1, 1])
+        with logo_col2:
+            st.image(logo_path, width=180)
+
+    if lang == "en":
         st.markdown(
-            f"<h1 style='text-align:left; margin-bottom:0;'>{tr['title']}</h1>",
+            f"<h1 style='text-align:center; font-size:3.4rem; margin-bottom:0.5rem;'>{tr['title']}</h1>",
             unsafe_allow_html=True,
         )
 
