@@ -25,9 +25,19 @@ st.markdown(
     .stRadio label, .stSelectbox label, .stTextInput label, .stTextArea label,
     .stMultiSelect label, .stDateInput label, .stSlider label {
         font-size: 1.05rem !important;
-        font-weight: 700;
+        font-weight: 700 !important;
     }
-    .stRadio div[role="radiogroup"] label p { font-size: 1rem !important; }
+    /* Streamlit nests the actual label text in a <p> tag, which can
+       override the parent's font-weight — target it explicitly so the
+       question text visibly renders bold, not just the label wrapper. */
+    .stRadio > label p, .stSelectbox > label p, .stTextInput > label p,
+    .stTextArea > label p, .stMultiSelect > label p, .stDateInput > label p,
+    .stSlider > label p,
+    div[data-testid="stWidgetLabel"] p {
+        font-weight: 700 !important;
+        font-size: 1.05rem !important;
+    }
+    .stRadio div[role="radiogroup"] label p { font-size: 1rem !important; font-weight: 400 !important; }
     .stButton button, .stFormSubmitButton button, .stDownloadButton button {
         font-size: 1.05rem !important;
         padding: 0.6rem 1.2rem !important;
@@ -36,10 +46,12 @@ st.markdown(
     div[data-testid="stMetricLabel"] { font-size: 1rem !important; }
     .stDataFrame { font-size: 0.95rem !important; }
 
-    /* Section header styling — colored accent bar, tinted background */
+    /* Section header styling — colored accent bar, tinted background.
+       Uses logical properties (inline-start) so it flips correctly for
+       Arabic's right-to-left layout instead of always being on the left. */
     h3 {
-        border-left: 5px solid #0061FC !important;
-        background: linear-gradient(90deg, #F0F6FF 0%, rgba(240,246,255,0) 100%);
+        border-inline-start: 5px solid #0061FC !important;
+        background: #F0F6FF;
         padding: 0.6rem 0.9rem !important;
         border-radius: 6px;
         margin-top: 2rem !important;
