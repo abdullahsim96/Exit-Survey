@@ -11,6 +11,35 @@ from supabase import create_client
 # ----------------------------
 st.set_page_config(page_title="Employee Exit Survey", page_icon="📋", layout="wide")
 
+# ----------------------------
+# Global font upsize (applies to both the survey and the dashboard)
+# ----------------------------
+st.markdown(
+    """
+    <style>
+    html, body, [class*="css"] { font-size: 18px; }
+    p, span, label, .stMarkdown, .stCaption { font-size: 1rem !important; }
+    h1 { font-size: 2.1rem !important; }
+    h2 { font-size: 1.7rem !important; }
+    h3 { font-size: 1.4rem !important; }
+    .stRadio label, .stSelectbox label, .stTextInput label, .stTextArea label,
+    .stMultiSelect label, .stDateInput label, .stSlider label {
+        font-size: 1.05rem !important;
+        font-weight: 500;
+    }
+    .stRadio div[role="radiogroup"] label p { font-size: 1rem !important; }
+    .stButton button, .stFormSubmitButton button, .stDownloadButton button {
+        font-size: 1.05rem !important;
+        padding: 0.6rem 1.2rem !important;
+    }
+    div[data-testid="stMetricValue"] { font-size: 2rem !important; }
+    div[data-testid="stMetricLabel"] { font-size: 1rem !important; }
+    .stDataFrame { font-size: 0.95rem !important; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 TABLE_NAME = "exit_survey_responses"
 LINKS_TABLE = "survey_links"
 
@@ -556,97 +585,175 @@ with tab_dashboard:
         if df.empty:
             st.info("No responses submitted yet.")
         else:
-            st.title("📊 Exit Survey Analytics")
-
-            if st.button("🔄 Refresh data"):
+            header_col, refresh_col = st.columns([5, 1])
+            header_col.title("📊 Exit Survey Analytics")
+            if refresh_col.button("🔄 Refresh", use_container_width=True):
                 load_responses.clear()
                 st.rerun()
 
-            col1, col2, col3 = st.columns(3)
-            col1.metric("Total responses", len(df))
-            if "would_recommend" in df.columns and df["would_recommend"].notna().sum() > 0:
-                answered = df[df["would_recommend"] != "Prefer not to say"]
-                pct_recommend = (
-                    (answered["would_recommend"] == "Recommend").sum() / len(answered) * 100
-                    if len(answered) > 0 else 0
+            # ---- Filters (apply to every view below) ----
+            with st.container(border=True):
+                fcol1, fcol2 = st.columns(2)
+                dept_options = sorted(df["department"].dropna().unique().tolist())
+                selected_depts = fcol1.multiselect(
+                    "Filter by department", dept_options, default=dept_options
                 )
-                col2.metric("Would recommend", f"{pct_recommend:.0f}%")
+                min_date = df["created_at"].min().date()
+                max_date = df["created_at"].max().date()
+                if min_date < max_date:
+                    date_range = fcol2.date_input(
+                        "Filter by date range", value=(min_date, max_date),
+                        min_value=min_date, max_value=max_date,
+                    )
+                else:
+                    date_range = (min_date, max_date)
+
+            filtered = df[df["department"].isin(selected_depts)] if selected_depts else df.iloc[0:0]
+            if isinstance(date_range, tuple) and len(date_range) == 2:
+                start, end = date_range
+                filtered = filtered[
+                    (filtered["created_at"].dt.date >= start) & (filtered["created_at"].dt.date <= end)
+                ]
+            st.caption(f"Showing {len(filtered)} of {len(df)} total responses.")
+
+            if filtered.empty:
+                st.warning("No responses match the current filters.")
             else:
-                col2.metric("Would recommend", "N/A")
-            pct_return = (
-                (df["would_return"] == "Yes").sum() / df["would_return"].notna().sum() * 100
-                if df["would_return"].notna().sum() > 0
-                else 0
-            )
-            col3.metric("Would return", f"{pct_return:.0f}%")
-
-            st.divider()
-
-            st.subheader("Average score by section (1-5 scale)")
-            st.caption("Sections below 3.0 are worth digging into first.")
-            section_avgs = {}
-            for section, cols in SECTION_COLUMNS.items():
-                valid_cols = [c for c in cols if c in df.columns]
-                if valid_cols:
-                    section_avgs[section] = df[valid_cols].mean(numeric_only=True).mean()
-            section_df = pd.DataFrame(
-                {"Section": list(section_avgs.keys()), "Average score": list(section_avgs.values())}
-            ).set_index("Section")
-            st.bar_chart(section_df)
-
-            low_sections = section_df[section_df["Average score"] < 3.0]
-            if not low_sections.empty:
-                st.warning(
-                    "⚠️ Below 3.0 average: "
-                    + ", ".join(f"{s} ({v:.1f})" for s, v in low_sections["Average score"].items())
+                view_overview, view_departments, view_feedback, view_raw = st.tabs(
+                    ["📈 Overview", "🏢 Departments", "💬 Open Feedback", "📋 Raw Data"]
                 )
 
-            st.divider()
+                # ================= OVERVIEW =================
+                with view_overview:
+                    col1, col2, col3, col4 = st.columns(4)
+                    col1.metric("Responses", len(filtered))
 
-            col_left, col_right = st.columns(2)
-            with col_left:
-                st.subheader("Primary reason for leaving")
-                reason_counts = df["primary_reason"].value_counts()
-                st.bar_chart(reason_counts)
+                    all_rating_cols = [c for cols in SECTION_COLUMNS.values() for c in cols if c in filtered.columns]
+                    overall_avg = filtered[all_rating_cols].mean(numeric_only=True).mean() if all_rating_cols else None
+                    col2.metric("Overall avg score", f"{overall_avg:.2f}/5" if pd.notna(overall_avg) else "N/A")
 
-            with col_right:
-                st.subheader("Overall culture rating")
-                culture_counts = df["culture_overall"].value_counts()
-                st.bar_chart(culture_counts)
+                    if "would_recommend" in filtered.columns and filtered["would_recommend"].notna().sum() > 0:
+                        answered = filtered[filtered["would_recommend"] != "Prefer not to say"]
+                        pct_recommend = (
+                            (answered["would_recommend"] == "Recommend").sum() / len(answered) * 100
+                            if len(answered) > 0 else 0
+                        )
+                        col3.metric("Would recommend", f"{pct_recommend:.0f}%")
+                    else:
+                        col3.metric("Would recommend", "N/A")
 
-            st.divider()
+                    pct_return = (
+                        (filtered["would_return"] == "Yes").sum() / filtered["would_return"].notna().sum() * 100
+                        if filtered["would_return"].notna().sum() > 0
+                        else 0
+                    )
+                    col4.metric("Would return", f"{pct_return:.0f}%")
 
-            st.subheader("Average scores by department")
-            all_rating_cols = [c for cols in SECTION_COLUMNS.values() for c in cols if c in df.columns]
-            dept_df = df.groupby("department")[all_rating_cols].mean(numeric_only=True)
-            dept_df["Overall avg"] = dept_df.mean(axis=1)
-            dept_df["Responses"] = df.groupby("department").size()
-            dept_df = dept_df[["Responses", "Overall avg"]].sort_values("Overall avg")
-            st.dataframe(dept_df.style.format({"Overall avg": "{:.2f}"}), use_container_width=True)
+                    st.divider()
 
-            st.divider()
+                    chart_col, trend_col = st.columns([3, 2])
+                    with chart_col:
+                        st.subheader("Average score by section")
+                        st.caption("Below 3.0 is worth digging into first.")
+                        section_avgs = {}
+                        for section, cols in SECTION_COLUMNS.items():
+                            valid_cols = [c for c in cols if c in filtered.columns]
+                            if valid_cols:
+                                section_avgs[section] = filtered[valid_cols].mean(numeric_only=True).mean()
+                        section_df = pd.DataFrame(
+                            {"Section": list(section_avgs.keys()), "Average score": list(section_avgs.values())}
+                        ).set_index("Section")
+                        st.bar_chart(section_df, height=300)
 
-            st.subheader("Responses over time")
-            time_df = df.set_index("created_at").resample("W").size()
-            time_df.name = "Responses"
-            st.line_chart(time_df)
+                        low_sections = section_df[section_df["Average score"] < 3.0]
+                        if not low_sections.empty:
+                            st.warning(
+                                "⚠️ Below 3.0: "
+                                + ", ".join(f"{s} ({v:.1f})" for s, v in low_sections["Average score"].items())
+                            )
 
-            if "survey_language" in df.columns:
-                st.divider()
-                st.subheader("Survey language used")
-                lang_counts = df["survey_language"].value_counts()
-                st.bar_chart(lang_counts)
+                    with trend_col:
+                        st.subheader("Responses over time")
+                        time_df = filtered.set_index("created_at").resample("W").size()
+                        time_df.name = "Responses"
+                        st.line_chart(time_df, height=300)
 
-            st.divider()
+                    st.divider()
+                    rcol1, rcol2 = st.columns(2)
+                    with rcol1:
+                        st.subheader("Primary reason for leaving")
+                        st.bar_chart(filtered["primary_reason"].value_counts())
+                    with rcol2:
+                        st.subheader("Overall culture rating")
+                        st.bar_chart(filtered["culture_overall"].value_counts())
 
-            st.subheader("Raw responses")
-            st.dataframe(df, use_container_width=True)
-            st.download_button(
-                "Download CSV",
-                data=df.to_csv(index=False).encode("utf-8"),
-                file_name="exit_survey_responses.csv",
-                mime="text/csv",
-            )
+                # ================= DEPARTMENTS =================
+                with view_departments:
+                    st.subheader("Average scores by department")
+                    all_rating_cols = [c for cols in SECTION_COLUMNS.values() for c in cols if c in filtered.columns]
+                    dept_df = filtered.groupby("department")[all_rating_cols].mean(numeric_only=True)
+                    dept_df["Overall avg"] = dept_df.mean(axis=1)
+                    dept_df["Responses"] = filtered.groupby("department").size()
+                    dept_df = dept_df[["Responses", "Overall avg"]].sort_values("Overall avg")
+                    st.dataframe(
+                        dept_df.style.format({"Overall avg": "{:.2f}"}).background_gradient(
+                            subset=["Overall avg"], cmap="RdYlGn", vmin=1, vmax=5
+                        ),
+                        use_container_width=True,
+                    )
+
+                    st.divider()
+                    st.subheader("Section breakdown per department")
+                    section_by_dept = {}
+                    for section, cols in SECTION_COLUMNS.items():
+                        valid_cols = [c for c in cols if c in filtered.columns]
+                        if valid_cols:
+                            section_by_dept[section] = filtered.groupby("department")[valid_cols].mean(numeric_only=True).mean(axis=1)
+                    st.dataframe(
+                        pd.DataFrame(section_by_dept).style.format("{:.2f}").background_gradient(cmap="RdYlGn", vmin=1, vmax=5),
+                        use_container_width=True,
+                    )
+
+                    if "survey_language" in filtered.columns:
+                        st.divider()
+                        st.subheader("Survey language used")
+                        st.bar_chart(filtered["survey_language"].value_counts())
+
+                # ================= OPEN FEEDBACK =================
+                with view_feedback:
+                    st.caption("Free-text answers, most recent first — useful for spotting recurring themes.")
+                    text_fields = [
+                        ("role_text", "Role clarity comments"),
+                        ("mgr_text", "Manager feedback"),
+                        ("vendor_text", "Vendor comments"),
+                        ("culture_text", "Culture/environment comments"),
+                        ("primary_reason_other", "Other reason (specified)"),
+                        ("other_comments", "Other comments"),
+                    ]
+                    for col, label in text_fields:
+                        if col not in filtered.columns:
+                            continue
+                        non_empty = filtered[filtered[col].notna() & (filtered[col].str.strip() != "")]
+                        if non_empty.empty:
+                            continue
+                        with st.expander(f"{label} ({len(non_empty)})"):
+                            for _, row in non_empty.sort_values("created_at", ascending=False).iterrows():
+                                dept = row.get("department", "—")
+                                date_str = row["created_at"].strftime("%Y-%m-%d")
+                                st.markdown(f"**{dept} · {date_str}**")
+                                st.write(row[col])
+                                st.markdown("---")
+
+                # ================= RAW DATA =================
+                with view_raw:
+                    st.subheader("Raw responses")
+                    st.dataframe(filtered, use_container_width=True)
+                    st.download_button(
+                        "Download filtered CSV",
+                        data=filtered.to_csv(index=False).encode("utf-8"),
+                        file_name="exit_survey_responses.csv",
+                        mime="text/csv",
+                    )
 
 # ============================================================
 # TAB 3: ADMIN - SURVEY LINKS + DEADLINES (HR only)
