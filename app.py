@@ -54,7 +54,8 @@ st.markdown(
         background: #F0F6FF;
         padding: 0.6rem 0.9rem !important;
         border-radius: 6px;
-        margin-top: 2rem !important;
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.8rem !important;
     }
 
     /* Submit button — brand blue, rounded, subtle shadow */
@@ -82,7 +83,7 @@ st.markdown(
         border-radius: 8px !important;
     }
 
-    hr { margin: 1.8rem 0 !important; opacity: 0.15; }
+    hr { margin: 1.4rem 0 !important; opacity: 0.15; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -427,13 +428,11 @@ with tab_survey:
 
     logo_path = "assets/51talk_logo.png"
     if os.path.exists(logo_path):
-        logo_col1, logo_col2, logo_col3 = st.columns([1, 1, 1])
-        with logo_col2:
-            st.image(logo_path, width=220)
+        st.image(logo_path, width=160)
 
     if lang == "en":
         st.markdown(
-            f"<h1 style='text-align:center; font-size:clamp(2rem, 6vw, 4.5rem) !important; margin-bottom:0.5rem; line-height:1.15;'>{tr['title']}</h1>",
+            f"<h1 style='text-align:center; font-size:clamp(2.5rem, 8vw, 6rem) !important; margin-bottom:0.5rem; line-height:1.15;'>{tr['title']}</h1>",
             unsafe_allow_html=True,
         )
 
