@@ -436,13 +436,16 @@ with tab_survey:
             unsafe_allow_html=True,
         )
 
-    st.markdown(f"<div style='text-align:center;'>{tr['intro']}</div>", unsafe_allow_html=True)
+    st.markdown(
+        f"<div style='text-align:center; font-size:0.9rem !important; color:#555;'>{tr['intro']}</div>",
+        unsafe_allow_html=True,
+    )
 
     if link_blocked:
         st.error(tr["link_invalid"] if block_reason == "invalid" else tr["link_expired"])
     else:
         st.markdown(
-            f"<div style='text-align:center;'><em>{tr['all_required']}</em></div>",
+            f"<div style='text-align:center; font-size:0.85rem !important; color:#777;'><em>{tr['all_required']}</em></div>",
             unsafe_allow_html=True,
         )
         st.divider()
