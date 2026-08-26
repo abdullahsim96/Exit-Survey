@@ -257,7 +257,7 @@ T = {
         "intro": (
             "Thank you for taking the time to complete this survey. Your honest feedback "
             "helps us understand where we can improve. Responses are kept confidential and "
-            "reviewed in aggregate. This should take about **5-10 minutes**."
+            "reviewed in aggregate. This should take about <strong>5-10 minutes</strong>."
         ),
         "all_required": "Fields marked with * are required.",
         "s1_title": "Section 1: Background",
@@ -310,7 +310,7 @@ T = {
         "intro": (
             "شكرًا لتخصيص وقتك لإكمال هذا الاستبيان. تساعدنا ملاحظاتك الصادقة على فهم "
             "النقاط التي يمكننا تحسينها فيها. سيتم الحفاظ على سرية إجاباتك ومراجعتها بشكل "
-            "إجمالي فقط. يستغرق إكمال الاستبيان من **5 إلى 10 دقائق** تقريبًا."
+            "إجمالي فقط. يستغرق إكمال الاستبيان من <strong>5 إلى 10 دقائق</strong> تقريبًا."
         ),
         "all_required": "الحقول المشار إليها بعلامة (*) إلزامية.",
         "s1_title": "القسم 1: المعلومات الأساسية",
