@@ -427,7 +427,9 @@ with tab_survey:
 
     logo_path = "assets/51talk_logo.png"
     if os.path.exists(logo_path):
-        st.image(logo_path, width=150)
+        logo_col1, logo_col2, logo_col3 = st.columns([1, 1, 1])
+        with logo_col2:
+            st.image(logo_path, width=220)
 
     if lang == "en":
         st.markdown(
@@ -435,12 +437,15 @@ with tab_survey:
             unsafe_allow_html=True,
         )
 
-    st.markdown(tr["intro"])
+    st.markdown(f"<div style='text-align:center;'>{tr['intro']}</div>", unsafe_allow_html=True)
 
     if link_blocked:
         st.error(tr["link_invalid"] if block_reason == "invalid" else tr["link_expired"])
     else:
-        st.caption(tr["all_required"])
+        st.markdown(
+            f"<div style='text-align:center;'><em>{tr['all_required']}</em></div>",
+            unsafe_allow_html=True,
+        )
         st.divider()
 
         with st.form("exit_survey_form", clear_on_submit=False):
