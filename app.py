@@ -432,7 +432,7 @@ with tab_survey:
 
     if lang == "en":
         st.markdown(
-            f"<h1 style='text-align:left; font-size:clamp(3.5rem, 12vw, 9rem) !important; margin-bottom:0.5rem; line-height:1.05;'>{tr['title']}</h1>",
+            f"<h1 style='text-align:center; font-size:clamp(3.5rem, 12vw, 9rem) !important; margin-bottom:0.5rem; line-height:1.05;'>{tr['title']}</h1>",
             unsafe_allow_html=True,
         )
 
