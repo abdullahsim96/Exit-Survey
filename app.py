@@ -12,78 +12,103 @@ from supabase import create_client
 st.set_page_config(page_title="Employee Exit Survey", page_icon="📋", layout="wide")
 
 # ----------------------------
-# Global font upsize (applies to both the survey and the dashboard)
+# Global typography — one consistent font-family and type scale for
+# the entire app (survey + dashboard), so headings, labels, buttons,
+# and body text all visibly match instead of falling back to whatever
+# the browser's default happens to be for each element type.
 # ----------------------------
+FONT_STACK = "'Segoe UI', Tahoma, Geneva, Verdana, Arial, sans-serif"
+
 st.markdown(
-    """
+    f"""
     <style>
-    html, body, [class*="css"] { font-size: 18px; }
-    p, span, label, .stMarkdown, .stCaption { font-size: 1rem !important; }
-    h1 { font-size: 2.1rem !important; }
-    h2 { font-size: 1.7rem !important; }
-    h3 { font-size: 1.4rem !important; }
+    html, body, [class*="css"],
+    h1, h2, h3, h4, h5, h6,
+    p, span, label, div, button, input, textarea, select,
+    .stMarkdown, .stCaption, .stDataFrame {{
+        font-family: {FONT_STACK} !important;
+    }}
+
+    html, body, [class*="css"] {{ font-size: 18px; }}
+
+    /* ---- Type scale ---- */
+    p, span, label, .stMarkdown, .stCaption {{ font-size: 1rem !important; }}
+    h1 {{ font-size: 2.1rem !important; font-weight: 700 !important; }}
+    h2 {{ font-size: 1.7rem !important; font-weight: 700 !important; }}
+    h3 {{ font-size: 1.4rem !important; font-weight: 700 !important; }}
+
+    /* Question / field labels — bold, slightly larger than body text */
     .stRadio label, .stSelectbox label, .stTextInput label, .stTextArea label,
-    .stMultiSelect label, .stDateInput label, .stSlider label {
+    .stMultiSelect label, .stDateInput label, .stSlider label {{
         font-size: 1.05rem !important;
         font-weight: 700 !important;
-    }
+    }}
     /* Streamlit nests the actual label text in a <p> tag, which can
-       override the parent's font-weight — target it explicitly so the
-       question text visibly renders bold, not just the label wrapper. */
+       override the parent's font-weight/family — target it explicitly
+       so the question text visibly renders bold and matches the font. */
     .stRadio > label p, .stSelectbox > label p, .stTextInput > label p,
     .stTextArea > label p, .stMultiSelect > label p, .stDateInput > label p,
     .stSlider > label p,
-    div[data-testid="stWidgetLabel"] p {
+    div[data-testid="stWidgetLabel"] p {{
         font-weight: 700 !important;
         font-size: 1.05rem !important;
-    }
-    .stRadio div[role="radiogroup"] label p { font-size: 1rem !important; font-weight: 400 !important; }
-    .stButton button, .stFormSubmitButton button, .stDownloadButton button {
+        font-family: {FONT_STACK} !important;
+    }}
+    /* Answer options (1-5 scale, Yes/No, etc.) — normal weight, one size
+       smaller than the question itself so the hierarchy is clear */
+    .stRadio div[role="radiogroup"] label p {{
+        font-size: 1rem !important;
+        font-weight: 400 !important;
+        font-family: {FONT_STACK} !important;
+    }}
+
+    .stButton button, .stFormSubmitButton button, .stDownloadButton button {{
         font-size: 1.05rem !important;
+        font-weight: 600 !important;
         padding: 0.6rem 1.2rem !important;
-    }
-    div[data-testid="stMetricValue"] { font-size: 2rem !important; }
-    div[data-testid="stMetricLabel"] { font-size: 1rem !important; }
-    .stDataFrame { font-size: 0.95rem !important; }
+    }}
+    div[data-testid="stMetricValue"] {{ font-size: 2rem !important; font-weight: 700 !important; }}
+    div[data-testid="stMetricLabel"] {{ font-size: 1rem !important; }}
+    .stDataFrame {{ font-size: 0.95rem !important; }}
 
     /* Section header styling — colored accent bar, tinted background.
        Uses logical properties (inline-start) so it flips correctly for
        Arabic's right-to-left layout instead of always being on the left. */
-    h3 {
+    h3 {{
         border-inline-start: 5px solid #0061FC !important;
         background: #F0F6FF;
         padding: 0.6rem 0.9rem !important;
         border-radius: 6px;
         margin-top: 0.5rem !important;
         margin-bottom: 0.8rem !important;
-    }
+    }}
 
     /* Submit button — brand blue, rounded, subtle shadow */
-    .stFormSubmitButton button {
+    .stFormSubmitButton button {{
         background-color: #0061FC !important;
         color: white !important;
         border: none !important;
         border-radius: 8px !important;
         box-shadow: 0 2px 8px rgba(0, 97, 252, 0.25);
         transition: transform 0.1s ease, box-shadow 0.1s ease;
-    }
-    .stFormSubmitButton button:hover {
+    }}
+    .stFormSubmitButton button:hover {{
         box-shadow: 0 4px 12px rgba(0, 97, 252, 0.35);
         transform: translateY(-1px);
-    }
+    }}
 
     /* Selected radio option pill highlight */
-    .stRadio div[role="radiogroup"] label[data-baseweb="radio"]:has(input:checked) {
+    .stRadio div[role="radiogroup"] label[data-baseweb="radio"]:has(input:checked) {{
         background: #F0F6FF;
         border-radius: 6px;
-    }
+    }}
 
     /* Text inputs / areas — softer border, rounded corners */
-    .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] {
+    .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] {{
         border-radius: 8px !important;
-    }
+    }}
 
-    hr { margin: 1.4rem 0 !important; opacity: 0.15; }
+    hr {{ margin: 1.4rem 0 !important; opacity: 0.15; }}
     </style>
     """,
     unsafe_allow_html=True,
