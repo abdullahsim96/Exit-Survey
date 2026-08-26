@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/industry-15fbf5db-19ce-4ab1-aab2-d4c1d75ac0a5/styles.css">
+<script src="_ds/industry-15fbf5db-19ce-4ab1-aab2-d4c1d75ac0a5/_ds_bundle.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+  ::placeholder { color: color-mix(in srgb, var(--color-text) 45%, transparent); }
+</style>
+</helmet>
+<div dir="{{ dir }}" style="min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+
+  <nav class="nav" style="border-bottom:1px solid var(--color-divider);flex-wrap:wrap">
+    <img src="assets/51talk_logo.png" alt="51Talk" style="height:24px;width:auto;display:block" />
+    <span class="tag tag-outline">{{ tr.brandTag }}</span>
+    <div style="margin-left:auto;display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap">
+      <div class="seg" role="radiogroup" aria-label="Section">
+        <label class="seg-opt"><input type="radio" name="__tab" checked="{{ isTabSurvey }}" onChange="{{ goSurvey }}" />{{ tr.tabSurvey }}</label>
+        <label class="seg-opt"><input type="radio" name="__tab" checked="{{ isTabDash }}" onChange="{{ goDash }}" />{{ tr.tabDash }}</label>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="Language">
+        <label class="seg-opt"><input type="radio" name="__lang" checked="{{ isEn }}" onChange="{{ setEn }}" />EN</label>
+        <label class="seg-opt"><input type="radio" name="__lang" checked="{{ isAr }}" onChange="{{ setAr }}" />ع</label>
+      </div>
+    </div>
+  </nav>
+
+  <sc-if value="{{ isTabSurvey }}" hint-placeholder-val="{{ true }}">
+    <main style="max-width:760px;margin:0 auto;padding:var(--space-8) var(--space-4) calc(var(--space-8) * 2)">
+
+      <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
+        <div style="text-align:center;margin-bottom:var(--space-6)">
+          <h1 style="font-size:clamp(32px,6vw,52px);margin-bottom:var(--space-3)">{{ tr.title }}</h1>
+          <p style="max-width:56ch;margin:0 auto var(--space-4);opacity:0.85">{{ tr.intro }}</p>
+          <div style="display:flex;gap:var(--space-2);justify-content:center;flex-wrap:wrap">
+            <span class="tag tag-accent">{{ tr.timeTag }}</span>
+            <span class="tag tag-neutral">{{ tr.sectionsTag }}</span>
+            <span class="tag tag-neutral">{{ tr.confidentialTag }}</span>
+          </div>
+        </div>
+
+        <form onSubmit="{{ handleSubmit }}">
+
+          <sc-if value="{{ hasErrors }}" hint-placeholder-val="{{ false }}">
+            <div class="card blueprint elev-sm" style="border-color:var(--color-accent-700);margin-bottom:var(--space-6);padding:var(--space-4)">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <div class="card-title" style="font-size:16px;color:var(--color-accent-800)">{{ tr.missing_prefix }}</div>
+              <ul style="margin:var(--space-2) 0 0;padding-inline-start:20px;font-size:13px;opacity:0.85">
+                <sc-for list="{{ errorList }}" as="err" hint-placeholder-count="2">
+                  <li>{{ err }}</li>
+                </sc-for>
+              </ul>
+            </div>
+          </sc-if>
+
+          <div class="card blueprint" style="margin-bottom:var(--space-6);padding:var(--space-4)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-kicker">{{ tr.kicker1 }}</div>
+            <h3 class="card-title" style="margin-bottom:var(--space-4)">{{ tr.s1_title }}</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)">
+              <div class="field">
+                <label style="font-size:14px;margin-bottom:var(--space-2)">{{ tr.department }}</label>
+                <select class="input" value="{{ v.department }}" onChange="{{ onDeptChange }}">
+                  <option value="">{{ tr.selectPlaceholder }}</option>
+                  <sc-for list="{{ deptOptions }}" as="d" hint-placeholder-count="5">
+                    <option value="{{ d }}">{{ d }}</option>
+                  </sc-for>
+                </select>
+              </div>
+              <div class="field">
+                <label style="font-size:14px;margin-bottom:var(--space-2)">{{ tr.small_team }}</label>
+                <input class="input" value="{{ v.smallTeam }}" onChange="{{ onSmallTeamChange }}" />
+              </div>
+              <div class="field">
+                <label style="font-size:14px;margin-bottom:var(--space-2)">{{ tr.crm }}</label>
+                <input class="input" value="{{ v.crm }}" onChange="{{ onCrmChange }}" />
+              </div>
+              <div class="field">
+                <label style="font-size:14px;margin-bottom:var(--space-2)">{{ tr.job_title }}</label>
+                <input class="input" value="{{ v.jobTitle }}" onChange="{{ onJobTitleChange }}" />
+              </div>
+            </div>
+          </div>
+
+          <div class="card blueprint" style="margin-bottom:var(--space-6);padding:var(--space-4)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-kicker">{{ tr.kicker2 }}</div>
+            <h3 class="card-title" style="margin-bottom:var(--space-4)">{{ tr.s2_title }}</h3>
+            <dc-import name="ChoiceField" label="{{ tr.role_clarity }}" field="role_clarity" options="{{ ratingOptions }}" value="{{ v.role_clarity }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <dc-import name="ChoiceField" label="{{ tr.role_tools }}" field="role_tools" options="{{ ratingOptions }}" value="{{ v.role_tools }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <dc-import name="ChoiceField" label="{{ tr.workload_deadlines }}" field="workload_deadlines" options="{{ ratingOptions }}" value="{{ v.workload_deadlines }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <div class="field">
+              <label style="font-size:14px;margin-bottom:var(--space-2)">{{ tr.role_text }}</label>
+              <textarea class="input" rows="2" value="{{ v.roleText }}" onChange="{{ onRoleTextChange }}"></textarea>
+            </div>
+          </div>
+
+          <div class="card blueprint" style="margin-bottom:var(--space-6);padding:var(--space-4)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-kicker">{{ tr.kicker3 }}</div>
+            <h3 class="card-title" style="margin-bottom:var(--space-4)">{{ tr.s2b_title }}</h3>
+            <dc-import name="ChoiceField" label="{{ tr.role_onboard_training }}" field="role_onboard_training" options="{{ ratingOptions }}" value="{{ v.role_onboard_training }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <dc-import name="ChoiceField" label="{{ tr.role_ongoing_training }}" field="role_ongoing_training" options="{{ ratingOptions }}" value="{{ v.role_ongoing_training }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+          </div>
+
+          <div class="card blueprint" style="margin-bottom:var(--space-6);padding:var(--space-4)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-kicker">{{ tr.kicker4 }}</div>
+            <h3 class="card-title" style="margin-bottom:var(--space-4)">{{ tr.s3_title }}</h3>
+            <dc-import name="ChoiceField" label="{{ tr.mgr_comm }}" field="mgr_comm" options="{{ ratingOptions }}" value="{{ v.mgr_comm }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <dc-import name="ChoiceField" label="{{ tr.mgr_feedback }}" field="mgr_feedback" options="{{ ratingOptions }}" value="{{ v.mgr_feedback }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <dc-import name="ChoiceField" label="{{ tr.mgr_growth }}" field="mgr_growth" options="{{ ratingOptions }}" value="{{ v.mgr_growth }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <dc-import name="ChoiceField" label="{{ tr.mgr_comfort }}" field="mgr_comfort" options="{{ ratingOptions }}" value="{{ v.mgr_comfort }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <div class="field">
+              <label style="font-size:14px;margin-bottom:var(--space-2)">{{ tr.mgr_text }}</label>
+              <textarea class="input" rows="2" value="{{ v.mgrText }}" onChange="{{ onMgrTextChange }}"></textarea>
+            </div>
+          </div>
+
+          <div class="card blueprint" style="margin-bottom:var(--space-6);padding:var(--space-4)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-kicker">{{ tr.kicker5 }}</div>
+            <h3 class="card-title" style="margin-bottom:var(--space-4)">{{ tr.s5_title }}</h3>
+            <dc-import name="ChoiceField" label="{{ tr.comp_fair }}" field="comp_fair" options="{{ ratingOptions }}" value="{{ v.comp_fair }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <dc-import name="ChoiceField" label="{{ tr.comp_benefits }}" field="comp_benefits" options="{{ ratingOptions }}" value="{{ v.comp_benefits }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+          </div>
+
+          <div class="card blueprint" style="margin-bottom:var(--space-6);padding:var(--space-4)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-kicker">{{ tr.kicker6 }}</div>
+            <h3 class="card-title" style="margin-bottom:var(--space-4)">{{ tr.s6b_title }}</h3>
+            <dc-import name="ChoiceField" label="{{ tr.vendor_support }}" field="vendor_support" options="{{ ratingOptions }}" value="{{ v.vendor_support }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <dc-import name="ChoiceField" label="{{ tr.vendor_hr }}" field="vendor_hr" options="{{ ratingOptions }}" value="{{ v.vendor_hr }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <div class="field">
+              <label style="font-size:14px;margin-bottom:var(--space-2)">{{ tr.vendor_text }}</label>
+              <textarea class="input" rows="2" value="{{ v.vendorText }}" onChange="{{ onVendorTextChange }}"></textarea>
+            </div>
+          </div>
+
+          <div class="card blueprint" style="margin-bottom:var(--space-6);padding:var(--space-4)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-kicker">{{ tr.kicker7 }}</div>
+            <h3 class="card-title" style="margin-bottom:var(--space-4)">{{ tr.s6_title }}</h3>
+            <dc-import name="ChoiceField" label="{{ tr.culture_respect }}" field="culture_respect" options="{{ ratingOptions }}" value="{{ v.culture_respect }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <dc-import name="ChoiceField" label="{{ tr.culture_belong }}" field="culture_belong" options="{{ ratingOptions }}" value="{{ v.culture_belong }}" on-change="{{ setValue }}" low-hint="{{ tr.hintLow }}" high-hint="{{ tr.hintHigh }}" hint-size="100%,90px"></dc-import>
+            <dc-import name="ChoiceField" label="{{ tr.culture_overall }}" field="culture_overall" options="{{ cultureOptions }}" value="{{ v.culture_overall }}" on-change="{{ setValue }}" hint-size="100%,90px"></dc-import>
+            <div class="field">
+              <label style="font-size:14px;margin-bottom:var(--space-2)">{{ tr.culture_text }}</label>
+              <textarea class="input" rows="2" value="{{ v.cultureText }}" onChange="{{ onCultureTextChange }}"></textarea>
+            </div>
+          </div>
+
+          <div class="card blueprint" style="margin-bottom:var(--space-6);padding:var(--space-4)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="card-kicker">{{ tr.kicker8 }}</div>
+            <h3 class="card-title" style="margin-bottom:var(--space-4)">{{ tr.s8_title }}</h3>
+            <div class="field">
+              <label style="font-size:14px;margin-bottom:var(--space-2)">{{ tr.primary_reason }}</label>
+              <select class="input" value="{{ v.primaryReason }}" onChange="{{ onPrimaryReasonChange }}">
+                <option value="">{{ tr.selectPlaceholder }}</option>
+                <sc-for list="{{ reasonSelectOptions }}" as="r" hint-placeholder-count="9">
+                  <option value="{{ r.value }}">{{ r.label }}</option>
+                </sc-for>
+              </select>
+            </div>
+            <div class="field">
+              <label style="font-size:14px;margin-bottom:var(--space-2)">{{ tr.primary_reason_other }}</label>
+              <input class="input" value="{{ v.primaryReasonOther }}" onChange="{{ onPrimaryReasonOtherChange }}" />
+            </div>
+            <dc-import name="ChoiceField" label="{{ tr.enps }}" field="enps" options="{{ recommendOptions }}" value="{{ v.enps }}" on-change="{{ setValue }}" hint-size="100%,90px"></dc-import>
+            <dc-import name="ChoiceField" label="{{ tr.return }}" field="wouldReturn" options="{{ returnOptions }}" value="{{ v.wouldReturn }}" on-change="{{ setValue }}" hint-size="100%,90px"></dc-import>
+            <div class="field">
+              <label style="font-size:14px;margin-bottom:var(--space-2)">{{ tr.other_comments }}</label>
+              <textarea class="input" rows="2" value="{{ v.otherComments }}" onChange="{{ onOtherCommentsChange }}"></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block blueprint" style="font-size:16px;padding:var(--space-3)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            {{ tr.submit }}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+      </sc-if>
+
+      <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+        <div class="card blueprint elev-md" style="padding:var(--space-8) var(--space-6);text-align:center;margin-top:var(--space-8)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-accent);margin:0 auto var(--space-4)"><path d="M20 6 9 17l-5-5"/></svg>
+          <h2 style="margin-bottom:var(--space-3)">{{ tr.success }}</h2>
+          <button type="button" class="btn btn-secondary blueprint" onClick="{{ resetForm }}" style="margin:0 auto">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            {{ tr.resetLabel }}
+          </button>
+        </div>
+      </sc-if>
+
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isTabDash }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:1080px;margin:0 auto;padding:var(--space-8) var(--space-4) calc(var(--space-8) * 2)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-4)">
+        <div>
+          <h1 style="font-size:32px;margin-bottom:4px">Exit Survey Analytics</h1>
+          <sc-if value="{{ showBanner }}" hint-placeholder-val="{{ true }}">
+            <span class="tag tag-neutral">Sample data shown for preview</span>
+          </sc-if>
+        </div>
+        <button type="button" class="btn btn-ghost">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+          Refresh
+        </button>
+      </div>
+
+      <div class="card blueprint" style="padding:var(--space-4);margin-bottom:var(--space-6)">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="card-kicker" style="margin-bottom:var(--space-2)">Filter by department</div>
+        <div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
+          <sc-for list="{{ deptChips }}" as="c" hint-placeholder-count="5">
+            <button type="button" class="tag {{ c.cls }}" style="cursor:pointer;border:none" onClick="{{ c.toggle }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-4);margin-bottom:var(--space-6)">
+        <div class="card blueprint" style="padding:var(--space-4)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">Responses</div>
+          <div class="card-title" style="font-size:30px">{{ kpi.responses }}</div>
+        </div>
+        <div class="card blueprint" style="padding:var(--space-4)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">Overall avg score</div>
+          <div class="card-title" style="font-size:30px">{{ kpi.avg }}</div>
+        </div>
+        <div class="card blueprint" style="padding:var(--space-4)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">Would recommend</div>
+          <div class="card-title" style="font-size:30px">{{ kpi.recommend }}</div>
+        </div>
+        <div class="card blueprint" style="padding:var(--space-4)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">Would return</div>
+          <div class="card-title" style="font-size:30px">{{ kpi.wouldReturn }}</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:var(--space-4);margin-bottom:var(--space-6)">
+        <div class="card blueprint" style="padding:var(--space-4)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-title" style="font-size:16px;margin-bottom:2px">Average score by section</div>
+          <p class="card-body" style="margin-bottom:var(--space-4);font-size:12px">Below 3.0 is worth digging into first.</p>
+          <div style="display:grid;gap:var(--space-3)">
+            <sc-for list="{{ sectionBars }}" as="b" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:110px 1fr 40px;align-items:center;gap:var(--space-2)">
+                <span style="font-size:12px;opacity:0.8">{{ b.label }}</span>
+                <div style="height:10px;background:var(--color-neutral-200);position:relative">
+                  <div style="{{ b.barStyle }}"></div>
+                </div>
+                <span style="font-size:12px;text-align:right;font-variant-numeric:tabular-nums">{{ b.display }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div class="card blueprint" style="padding:var(--space-4)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-title" style="font-size:16px;margin-bottom:var(--space-4)">Responses over time</div>
+          <svg width="100%" height="140" viewBox="0 0 260 140" preserveAspectRatio="none">
+            <line x1="0" y1="120" x2="260" y2="120" stroke="var(--color-divider)" stroke-width="1"></line>
+            <polyline points="{{ linePoints }}" fill="none" stroke="var(--color-accent)" stroke-width="2"></polyline>
+            <sc-for list="{{ lineDots }}" as="pt" hint-placeholder-count="9">
+              <circle cx="{{ pt.x }}" cy="{{ pt.y }}" r="2.5" fill="var(--color-accent)"></circle>
+            </sc-for>
+          </svg>
+          <div style="display:flex;justify-content:space-between;font-size:11px;opacity:0.55;margin-top:4px">
+            <span>9 weeks ago</span><span>This week</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin-bottom:var(--space-6)">
+        <div class="card blueprint" style="padding:var(--space-4)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-title" style="font-size:16px;margin-bottom:var(--space-4)">Primary reason for leaving</div>
+          <div style="display:grid;gap:var(--space-3)">
+            <sc-for list="{{ reasonBars }}" as="b" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:150px 1fr 24px;align-items:center;gap:var(--space-2)">
+                <span style="font-size:12px;opacity:0.8">{{ b.label }}</span>
+                <div style="height:10px;background:var(--color-neutral-200);position:relative">
+                  <div style="{{ b.barStyle }}"></div>
+                </div>
+                <span style="font-size:12px;text-align:right;font-variant-numeric:tabular-nums">{{ b.display }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div class="card blueprint" style="padding:var(--space-4)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-title" style="font-size:16px;margin-bottom:var(--space-4)">Overall culture rating</div>
+          <div style="display:grid;gap:var(--space-3)">
+            <sc-for list="{{ cultureBars }}" as="b" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:110px 1fr 24px;align-items:center;gap:var(--space-2)">
+                <span style="font-size:12px;opacity:0.8">{{ b.label }}</span>
+                <div style="height:10px;background:var(--color-neutral-200);position:relative">
+                  <div style="{{ b.barStyle }}"></div>
+                </div>
+                <span style="font-size:12px;text-align:right;font-variant-numeric:tabular-nums">{{ b.display }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div class="card blueprint" style="padding:var(--space-4);margin-bottom:var(--space-6)">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="card-title" style="font-size:16px;margin-bottom:var(--space-3)">Average scores by department</div>
+        <table class="table">
+          <thead><tr><th>Department</th><th>Responses</th><th>Overall avg</th></tr></thead>
+          <tbody>
+            <sc-for list="{{ deptRows }}" as="row" hint-placeholder-count="5">
+              <tr>
+                <td>{{ row.department }}</td>
+                <td>{{ row.count }}</td>
+                <td><span class="tag {{ row.tagCls }}">{{ row.avg }}</span></td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card blueprint" style="padding:var(--space-4)">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="card-title" style="font-size:16px;margin-bottom:2px">Open feedback</div>
+        <p class="card-body" style="font-size:12px;margin-bottom:var(--space-4)">Sample free-text answers — useful for spotting recurring themes.</p>
+        <div style="display:grid;gap:var(--space-4)">
+          <sc-for list="{{ feedbackQuotes }}" as="q" hint-placeholder-count="4">
+            <div style="border-inline-start:2px solid var(--color-divider);padding-inline-start:var(--space-3)">
+              <div style="font-size:11px;opacity:0.6;margin-bottom:2px">{{ q.meta }}</div>
+              <div style="font-size:14px">{{ q.text }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1280, &quot;height&quot;: 900}, &quot;defaultLanguage&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;en&quot;, &quot;options&quot;: [&quot;en&quot;, &quot;ar&quot;], &quot;tsType&quot;: &quot;'en' | 'ar'&quot;}, &quot;defaultTab&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;survey&quot;, &quot;options&quot;: [&quot;survey&quot;, &quot;dashboard&quot;], &quot;tsType&quot;: &quot;'survey' | 'dashboard'&quot;}, &quot;showSampleDataBanner&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;}}">
+const DEPTS = ['SS-Kids', 'SS-Adults', 'CC & TMK', 'Operations', 'HR'];
+
+const REASONS = [
+  'Compensation/benefits', 'Career growth/advancement', 'Manager relationship',
+  'Workload/burnout', 'Culture/environment', 'Work location/commute/flexibility',
+  'Better opportunity elsewhere', 'Personal reasons', 'Other',
+];
+
+const OPT = {
+  culture_overall: {
+    en: { 'Very Positive': 'Very Positive', Positive: 'Positive', Neutral: 'Neutral', Negative: 'Negative', 'Very Negative': 'Very Negative' },
+    ar: { 'Very Positive': 'إيجابية جدًا', Positive: 'إيجابية', Neutral: 'محايدة', Negative: 'سلبية', 'Very Negative': 'سلبية جدًا' },
+  },
+  primary_reason: {
+    en: Object.fromEntries(REASONS.map((r) => [r, r])),
+    ar: {
+      'Compensation/benefits': 'التعويضات/المزايا', 'Career growth/advancement': 'النمو الوظيفي/الترقية',
+      'Manager relationship': 'العلاقة مع المدير', 'Workload/burnout': 'عبء العمل/الاحتراق الوظيفي',
+      'Culture/environment': 'الثقافة/بيئة العمل', 'Work location/commute/flexibility': 'موقع العمل/التنقل/المرونة',
+      'Better opportunity elsewhere': 'فرصة أفضل في مكان آخر', 'Personal reasons': 'أسباب شخصية', Other: 'أخرى',
+    },
+  },
+  return: { en: { Yes: 'Yes', Maybe: 'Maybe', No: 'No' }, ar: { Yes: 'نعم', Maybe: 'ربما', No: 'لا' } },
+  recommend: {
+    en: { Recommend: 'Recommend', 'Not recommend': 'Not recommend', 'Prefer not to say': 'Prefer not to say' },
+    ar: { Recommend: 'أوصي', 'Not recommend': 'لا أوصي', 'Prefer not to say': 'أفضّل عدم الإفصاح' },
+  },
+};
+
+const RATING_LABELS = {
+  en: { 1: '1 - Strongly Disagree', 2: '2 - Disagree', 3: '3 - Neutral', 4: '4 - Agree', 5: '5 - Strongly Agree' },
+  ar: { 1: '1 - غير موافق بشدة', 2: '2 - غير موافق', 3: '3 - محايد', 4: '4 - موافق', 5: '5 - موافق بشدة' },
+};
+
+const T = {
+  en: {
+    brandTag: 'Exit Survey', tabSurvey: 'Take Survey', tabDash: 'Analytics Dashboard',
+    timeTag: '5-10 minutes', sectionsTag: '8 sections', confidentialTag: 'Confidential',
+    title: 'Employee Exit Survey',
+    intro: 'Thank you for taking the time to complete this survey. Your honest feedback helps us understand where we can improve. Responses are kept confidential and reviewed in aggregate. This should take about 5-10 minutes.',
+    selectPlaceholder: 'Select...',
+    kicker1: 'Section 1', s1_title: 'Background', department: 'Department *', small_team: 'Small Team Name *', crm: 'CRM', job_title: 'Job title *',
+    kicker2: 'Section 2', s2_title: 'Role Clarity',
+    role_clarity: 'I had a clear understanding of what was expected of me in my role. *',
+    role_tools: 'I had the tools and information needed to do my job well. *',
+    workload_deadlines: 'I always knew the targets required of me and my rate of achievement toward them each month. *',
+    role_text: 'Was there anything about your role that felt unclear or different from what you expected?',
+    kicker3: 'Section 3', s2b_title: 'Training & Development',
+    role_onboard_training: 'I received adequate training during my onboarding to prepare me well for my role. *',
+    role_ongoing_training: 'I received the ongoing on-the-job training I needed to perform my role well. *',
+    kicker4: 'Section 4', s3_title: 'Manager Relationship (Direct Manager)',
+    mgr_comm: 'My direct manager communicated clearly and regularly with me. *',
+    mgr_feedback: 'My direct manager gave me useful, constructive feedback. *',
+    mgr_growth: 'My direct manager supported my growth and development. *',
+    mgr_comfort: 'I felt comfortable raising concerns or issues with my direct manager. *',
+    mgr_text: 'What, if anything, could your direct manager have done differently to support you better?',
+    kicker5: 'Section 5', s5_title: 'Compensation & Benefits',
+    comp_fair: 'My salary was fair relative to my role and responsibilities. *',
+    comp_benefits: 'I was satisfied with the medical insurance benefits offered. *',
+    kicker6: 'Section 6', s6b_title: 'Vendor Satisfaction',
+    vendor_support: 'I always find it easy to get support and communicate with the vendor. *',
+    vendor_hr: 'I was satisfied with the HR services provided by the vendor. *',
+    vendor_text: 'Any additional comments about your experience with the vendor?',
+    kicker7: 'Section 7', s6_title: 'Culture & Environment',
+    culture_respect: 'I felt respected and valued as an employee. *',
+    culture_belong: 'I felt a sense of belonging on my team. *',
+    culture_overall: 'I would describe the overall culture as: *',
+    culture_text: 'Was there a specific culture or environment issue that influenced your decision to leave?',
+    kicker8: 'Section 8', s8_title: 'Overall & Wrap-Up',
+    primary_reason: 'What is the primary reason you are leaving? *',
+    primary_reason_other: 'If Other, please specify:',
+    enps: 'Would you recommend this company as a place to work to a friend? *',
+    return: 'Would you consider returning to this company in the future? *',
+    other_comments: "Any other comments or feedback you'd like to share?",
+    submit: 'Submit Survey', missing_prefix: 'Please complete the following required fields before submitting:',
+    success: 'Thank you! Your response has been submitted.', resetLabel: 'Submit another response',
+    hintLow: 'Strongly disagree', hintHigh: 'Strongly agree',
+  },
+  ar: {
+    brandTag: 'استبيان الخروج', tabSurvey: 'تعبئة الاستبيان', tabDash: 'لوحة التحليلات',
+    timeTag: '٥-١٠ دقائق', sectionsTag: '٨ أقسام', confidentialTag: 'سرية',
+    title: 'Employee Exit Survey',
+    intro: 'شكرًا لتخصيص وقتك لإكمال هذا الاستبيان. تساعدنا ملاحظاتك الصادقة على فهم النقاط التي يمكننا تحسينها فيها. سيتم الحفاظ على سرية إجاباتك ومراجعتها بشكل إجمالي فقط. يستغرق إكمال الاستبيان من 5 إلى 10 دقائق تقريبًا.',
+    selectPlaceholder: 'اختر...',
+    kicker1: 'القسم 1', s1_title: 'المعلومات الأساسية', department: 'الإدارة *', small_team: 'اسم الفريق (Small Team) *', crm: 'CRM', job_title: 'المسمى الوظيفي *',
+    kicker2: 'القسم 2', s2_title: 'وضوح الدور',
+    role_clarity: 'كان لدي فهم واضح لما هو متوقع مني في دوري. *',
+    role_tools: 'توفرت لدي الأدوات والمعلومات اللازمة لأداء عملي بكفاءة. *',
+    workload_deadlines: 'كنت دائمًا على معرفة بالأهداف المطلوبة مني ونسبة تحقيقي لها خلال الشهر. *',
+    role_text: 'هل كان هناك أي جانب من دورك شعرت أنه غير واضح أو مختلف عمّا توقعته؟',
+    kicker3: 'القسم 3', s2b_title: 'التدريب والتطوير',
+    role_onboard_training: 'حصلت على تدريب كافٍ في بداية عملي ساعدني على فهم دوري بشكل جيد. *',
+    role_ongoing_training: 'تلقيت التدريب المستمر أثناء العمل الذي احتجته لأداء دوري بشكل جيد. *',
+    kicker4: 'القسم 4', s3_title: 'العلاقة مع المدير المباشر',
+    mgr_comm: 'كان مديري المباشر يتواصل معي بوضوح وبانتظام. *',
+    mgr_feedback: 'قدم لي مديري المباشر ملاحظات مفيدة وبناءة. *',
+    mgr_growth: 'دعمني مديري المباشر في نموي وتطوري المهني. *',
+    mgr_comfort: 'شعرت بالارتياح عند طرح المخاوف أو المشكلات على مديري المباشر. *',
+    mgr_text: 'ما الذي كان بإمكان مديرك المباشر فعله بشكل مختلف لدعمك على نحو أفضل، إن وجد؟',
+    kicker5: 'القسم 5', s5_title: 'التعويضات والمزايا',
+    comp_fair: 'كان راتبي عادلاً بالنسبة لدوري ومسؤولياتي. *',
+    comp_benefits: 'كنت راضيًا عن مزايا التأمين الطبي المقدمة. *',
+    kicker6: 'القسم 6', s6b_title: 'رضا المورد (Vendor)',
+    vendor_support: 'أجد دائمًا الدعم اللازم وأتواصل بسهولة مع المورد (Vendor). *',
+    vendor_hr: 'كنت راضيًا عن خدمات الموارد البشرية المقدمة من المورد. *',
+    vendor_text: 'هل لديك أي تعليقات إضافية حول تجربتك مع المورد؟',
+    kicker7: 'القسم 7', s6_title: 'الثقافة وبيئة العمل',
+    culture_respect: 'شعرت بالاحترام والتقدير كموظف. *',
+    culture_belong: 'شعرت بالانتماء إلى فريقي. *',
+    culture_overall: 'كيف تصف ثقافة الشركة بشكل عام؟ *',
+    culture_text: 'هل كانت هناك مشكلة محددة تتعلق بالثقافة أو بيئة العمل أثرت على قرارك بالمغادرة؟',
+    kicker8: 'القسم 8', s8_title: 'الخلاصة العامة',
+    primary_reason: 'ما هو السبب الرئيسي لمغادرتك؟ *',
+    primary_reason_other: "إذا اخترت 'أخرى'، يرجى التحديد:",
+    enps: 'هل توصي بالعمل في هذه الشركة لأحد أصدقائك؟ *',
+    return: 'هل تفكر في العودة للعمل في هذه الشركة مستقبلاً؟ *',
+    other_comments: 'هل لديك أي تعليقات أو ملاحظات أخرى تود مشاركتها؟',
+    submit: 'إرسال الاستبيان', missing_prefix: 'يرجى إكمال الحقول المطلوبة التالية قبل الإرسال:',
+    success: 'شكرًا لك! تم إرسال إجابتك بنجاح.', resetLabel: 'إرسال إجابة أخرى',
+    hintLow: 'غير موافق بشدة', hintHigh: 'موافق بشدة',
+  },
+};
+
+const MOCK = [
+  { d: 'SS-Kids', w: 9, role: 4.2, trn: 4.0, mgr: 2.4, comp: 3.8, ven: 4.0, cul: 4.1, reason: 'Manager relationship', cult: 'Positive', rec: 'Recommend', ret: 'Maybe' },
+  { d: 'SS-Kids', w: 8, role: 3.8, trn: 3.6, mgr: 2.8, comp: 3.4, ven: 3.6, cul: 3.9, reason: 'Workload/burnout', cult: 'Neutral', rec: 'Not recommend', ret: 'No' },
+  { d: 'SS-Kids', w: 6, role: 4.5, trn: 4.3, mgr: 3.2, comp: 4.0, ven: 4.2, cul: 4.4, reason: 'Better opportunity elsewhere', cult: 'Very Positive', rec: 'Recommend', ret: 'Yes' },
+  { d: 'SS-Kids', w: 4, role: 3.6, trn: 3.8, mgr: 2.2, comp: 3.2, ven: 3.4, cul: 3.6, reason: 'Manager relationship', cult: 'Negative', rec: 'Not recommend', ret: 'No' },
+  { d: 'SS-Kids', w: 2, role: 4.0, trn: 4.1, mgr: 2.9, comp: 3.7, ven: 3.9, cul: 4.0, reason: 'Career growth/advancement', cult: 'Positive', rec: 'Recommend', ret: 'Maybe' },
+  { d: 'SS-Kids', w: 1, role: 4.3, trn: 4.0, mgr: 3.0, comp: 3.9, ven: 4.1, cul: 4.2, reason: 'Personal reasons', cult: 'Positive', rec: 'Prefer not to say', ret: 'Yes' },
+  { d: 'SS-Adults', w: 9, role: 3.4, trn: 3.2, mgr: 2.0, comp: 2.8, ven: 3.0, cul: 3.2, reason: 'Compensation/benefits', cult: 'Negative', rec: 'Not recommend', ret: 'No' },
+  { d: 'SS-Adults', w: 7, role: 3.9, trn: 3.7, mgr: 2.6, comp: 3.3, ven: 3.5, cul: 3.7, reason: 'Workload/burnout', cult: 'Neutral', rec: 'Not recommend', ret: 'Maybe' },
+  { d: 'SS-Adults', w: 5, role: 4.1, trn: 3.9, mgr: 3.1, comp: 3.6, ven: 3.8, cul: 4.0, reason: 'Career growth/advancement', cult: 'Positive', rec: 'Recommend', ret: 'Yes' },
+  { d: 'SS-Adults', w: 3, role: 3.7, trn: 3.5, mgr: 2.4, comp: 3.0, ven: 3.3, cul: 3.5, reason: 'Compensation/benefits', cult: 'Negative', rec: 'Not recommend', ret: 'No' },
+  { d: 'SS-Adults', w: 1, role: 4.0, trn: 3.8, mgr: 2.9, comp: 3.5, ven: 3.7, cul: 3.9, reason: 'Better opportunity elsewhere', cult: 'Neutral', rec: 'Recommend', ret: 'Maybe' },
+  { d: 'CC & TMK', w: 8, role: 3.5, trn: 3.3, mgr: 2.7, comp: 3.1, ven: 3.2, cul: 3.4, reason: 'Work location/commute/flexibility', cult: 'Neutral', rec: 'Not recommend', ret: 'No' },
+  { d: 'CC & TMK', w: 6, role: 3.9, trn: 3.7, mgr: 3.0, comp: 3.4, ven: 3.6, cul: 3.8, reason: 'Career growth/advancement', cult: 'Positive', rec: 'Recommend', ret: 'Yes' },
+  { d: 'CC & TMK', w: 4, role: 3.6, trn: 3.4, mgr: 2.5, comp: 3.0, ven: 3.1, cul: 3.3, reason: 'Culture/environment', cult: 'Negative', rec: 'Not recommend', ret: 'No' },
+  { d: 'CC & TMK', w: 2, role: 4.0, trn: 3.9, mgr: 2.8, comp: 3.5, ven: 3.7, cul: 3.9, reason: 'Personal reasons', cult: 'Positive', rec: 'Prefer not to say', ret: 'Maybe' },
+  { d: 'Operations', w: 9, role: 3.8, trn: 3.6, mgr: 2.9, comp: 3.4, ven: 3.6, cul: 3.7, reason: 'Workload/burnout', cult: 'Neutral', rec: 'Not recommend', ret: 'Maybe' },
+  { d: 'Operations', w: 7, role: 4.2, trn: 4.0, mgr: 3.3, comp: 3.9, ven: 4.0, cul: 4.1, reason: 'Better opportunity elsewhere', cult: 'Positive', rec: 'Recommend', ret: 'Yes' },
+  { d: 'Operations', w: 5, role: 3.5, trn: 3.3, mgr: 2.3, comp: 2.9, ven: 3.0, cul: 3.2, reason: 'Compensation/benefits', cult: 'Negative', rec: 'Not recommend', ret: 'No' },
+  { d: 'Operations', w: 3, role: 4.0, trn: 3.8, mgr: 2.9, comp: 3.5, ven: 3.6, cul: 3.8, reason: 'Career growth/advancement', cult: 'Positive', rec: 'Recommend', ret: 'Maybe' },
+  { d: 'Operations', w: 1, role: 3.9, trn: 3.7, mgr: 3.1, comp: 3.6, ven: 3.8, cul: 3.9, reason: 'Other', cult: 'Neutral', rec: 'Prefer not to say', ret: 'Yes' },
+  { d: 'HR', w: 8, role: 4.1, trn: 4.0, mgr: 3.4, comp: 3.8, ven: 3.9, cul: 4.2, reason: 'Personal reasons', cult: 'Positive', rec: 'Recommend', ret: 'Yes' },
+  { d: 'HR', w: 6, role: 3.9, trn: 3.7, mgr: 3.0, comp: 3.5, ven: 3.7, cul: 3.9, reason: 'Career growth/advancement', cult: 'Positive', rec: 'Recommend', ret: 'Maybe' },
+  { d: 'HR', w: 4, role: 4.0, trn: 3.9, mgr: 3.2, comp: 3.6, ven: 3.8, cul: 4.0, reason: 'Better opportunity elsewhere', cult: 'Neutral', rec: 'Recommend', ret: 'Maybe' },
+  { d: 'HR', w: 2, role: 3.7, trn: 3.6, mgr: 2.6, comp: 3.2, ven: 3.4, cul: 3.6, reason: 'Workload/burnout', cult: 'Negative', rec: 'Not recommend', ret: 'No' },
+];
+
+const FEEDBACK = [
+  { meta: 'Operations · role clarity', text: 'Target numbers changed month to month without much notice, so it was hard to track progress.' },
+  { meta: 'SS-Adults · manager', text: 'More regular 1:1s would have helped me raise concerns earlier.' },
+  { meta: 'CC & TMK · vendor', text: 'Getting HR paperwork processed through the vendor took longer than expected.' },
+  { meta: 'SS-Kids · culture', text: 'The team was supportive, but recognition for good performance was rare.' },
+];
+
+function initialValues() {
+  return {
+    department: '', smallTeam: '', crm: '', jobTitle: '',
+    role_clarity: null, role_tools: null, workload_deadlines: null, roleText: '',
+    role_onboard_training: null, role_ongoing_training: null,
+    mgr_comm: null, mgr_feedback: null, mgr_growth: null, mgr_comfort: null, mgrText: '',
+    comp_fair: null, comp_benefits: null,
+    vendor_support: null, vendor_hr: null, vendorText: '',
+    culture_respect: null, culture_belong: null, culture_overall: '', cultureText: '',
+    primaryReason: '', primaryReasonOther: '',
+    enps: '', wouldReturn: '',
+    otherComments: '',
+  };
+}
+
+class Component extends DCLogic {
+  state = {
+    lang: this.props.defaultLanguage || 'en',
+    tab: this.props.defaultTab || 'survey',
+    values: initialValues(),
+    submitted: false,
+    errors: [],
+    deptFilter: [...DEPTS],
+  };
+
+  setValue = (field, val) => this.setState((s) => ({ values: { ...s.values, [field]: val } }));
+  onDeptChange = (e) => this.setValue('department', e.target.value);
+  onSmallTeamChange = (e) => this.setValue('smallTeam', e.target.value);
+  onCrmChange = (e) => this.setValue('crm', e.target.value);
+  onJobTitleChange = (e) => this.setValue('jobTitle', e.target.value);
+  onRoleTextChange = (e) => this.setValue('roleText', e.target.value);
+  onMgrTextChange = (e) => this.setValue('mgrText', e.target.value);
+  onVendorTextChange = (e) => this.setValue('vendorText', e.target.value);
+  onCultureTextChange = (e) => this.setValue('cultureText', e.target.value);
+  onPrimaryReasonChange = (e) => this.setValue('primaryReason', e.target.value);
+  onPrimaryReasonOtherChange = (e) => this.setValue('primaryReasonOther', e.target.value);
+  onOtherCommentsChange = (e) => this.setValue('otherComments', e.target.value);
+
+  goSurvey = () => this.setState({ tab: 'survey' });
+  goDash = () => this.setState({ tab: 'dashboard' });
+  setEn = () => this.setState({ lang: 'en' });
+  setAr = () => this.setState({ lang: 'ar' });
+
+  toggleDept = (d) => this.setState((s) => ({
+    deptFilter: s.deptFilter.includes(d) ? s.deptFilter.filter((x) => x !== d) : [...s.deptFilter, d],
+  }));
+
+  resetForm = () => this.setState({ values: initialValues(), submitted: false, errors: [] });
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const tr = T[this.state.lang];
+    const v = this.state.values;
+    const missing = [];
+    if (!v.department) missing.push(tr.department);
+    if (!v.smallTeam.trim()) missing.push(tr.small_team);
+    if (!v.jobTitle.trim()) missing.push(tr.job_title);
+    if (v.role_clarity == null) missing.push(tr.role_clarity);
+    if (v.role_tools == null) missing.push(tr.role_tools);
+    if (v.role_onboard_training == null) missing.push(tr.role_onboard_training);
+    if (v.role_ongoing_training == null) missing.push(tr.role_ongoing_training);
+    if (v.mgr_comm == null) missing.push(tr.mgr_comm);
+    if (v.mgr_feedback == null) missing.push(tr.mgr_feedback);
+    if (v.mgr_growth == null) missing.push(tr.mgr_growth);
+    if (v.mgr_comfort == null) missing.push(tr.mgr_comfort);
+    if (v.workload_deadlines == null) missing.push(tr.workload_deadlines);
+    if (v.comp_fair == null) missing.push(tr.comp_fair);
+    if (v.comp_benefits == null) missing.push(tr.comp_benefits);
+    if (v.vendor_support == null) missing.push(tr.vendor_support);
+    if (v.vendor_hr == null) missing.push(tr.vendor_hr);
+    if (v.culture_respect == null) missing.push(tr.culture_respect);
+    if (v.culture_belong == null) missing.push(tr.culture_belong);
+    if (!v.culture_overall) missing.push(tr.culture_overall);
+    if (!v.primaryReason) missing.push(tr.primary_reason);
+    if (!v.enps) missing.push(tr.enps);
+    if (!v.wouldReturn) missing.push(tr.return);
+    if (missing.length) this.setState({ errors: missing });
+    else this.setState({ errors: [], submitted: true });
+  };
+
+  barRow(label, value, max) {
+    const pct = Math.max(0, Math.min(100, (value / max) * 100));
+    const color = value < 3 ? 'var(--color-accent-800)' : 'var(--color-accent)';
+    return { label, display: value.toFixed(1), barStyle: `height:100%;width:${pct.toFixed(1)}%;background:${color}` };
+  }
+
+  renderVals() {
+    const lang = this.state.lang;
+    const tr = T[lang];
+    const opts5 = [1, 2, 3, 4, 5].map((n) => ({ value: n, label: RATING_LABELS[lang][n] }));
+    const cultureOptions = ['Very Positive', 'Positive', 'Neutral', 'Negative', 'Very Negative'].map((k) => ({ value: k, label: OPT.culture_overall[lang][k] }));
+    const recommendOptions = ['Recommend', 'Not recommend', 'Prefer not to say'].map((k) => ({ value: k, label: OPT.recommend[lang][k] }));
+    const returnOptions = ['Yes', 'Maybe', 'No'].map((k) => ({ value: k, label: OPT.return[lang][k] }));
+    const reasonSelectOptions = REASONS.map((k) => ({ value: k, label: OPT.primary_reason[lang][k] }));
+
+    const filtered = MOCK.filter((r) => this.state.deptFilter.includes(r.d));
+    const sectionDefs = [
+      ['Role Clarity', 'role'], ['Training', 'trn'], ['Manager', 'mgr'],
+      ['Compensation', 'comp'], ['Vendor', 'ven'], ['Culture', 'cul'],
+    ];
+    const mean = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0);
+    const sectionBars = sectionDefs.map(([label, key]) => this.barRow(label, mean(filtered.map((r) => r[key])), 5));
+
+    const allScores = filtered.flatMap((r) => sectionDefs.map(([, key]) => r[key]));
+    const overallAvg = mean(allScores);
+
+    const reasonCounts = {};
+    filtered.forEach((r) => { reasonCounts[r.reason] = (reasonCounts[r.reason] || 0) + 1; });
+    const maxReason = Math.max(1, ...Object.values(reasonCounts));
+    const reasonBars = Object.entries(reasonCounts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([label, count]) => ({ label, display: String(count), barStyle: `height:100%;width:${((count / maxReason) * 100).toFixed(1)}%;background:var(--color-accent)` }));
+
+    const cultureCounts = { 'Very Positive': 0, Positive: 0, Neutral: 0, Negative: 0, 'Very Negative': 0 };
+    filtered.forEach((r) => { cultureCounts[r.cult] = (cultureCounts[r.cult] || 0) + 1; });
+    const maxCulture = Math.max(1, ...Object.values(cultureCounts));
+    const cultureBars = Object.entries(cultureCounts).map(([label, count]) => ({
+      label, display: String(count), barStyle: `height:100%;width:${((count / maxCulture) * 100).toFixed(1)}%;background:var(--color-accent)`,
+    }));
+
+    const byWeek = {};
+    filtered.forEach((r) => { byWeek[r.w] = (byWeek[r.w] || 0) + 1; });
+    const weeks = Array.from({ length: 9 }, (_, i) => i + 1);
+    const counts = weeks.map((w) => byWeek[w] || 0);
+    const maxCount = Math.max(1, ...counts);
+    const W = 260, H = 140, pad = 12;
+    const lineDots = counts.map((c, i) => ({
+      x: (pad + (i / (weeks.length - 1)) * (W - 2 * pad)).toFixed(1),
+      y: (H - 20 - (c / maxCount) * (H - 40)).toFixed(1),
+    }));
+    const linePoints = lineDots.map((p) => `${p.x},${p.y}`).join(' ');
+
+    const deptRows = DEPTS.filter((d) => this.state.deptFilter.includes(d)).map((d) => {
+      const rows = MOCK.filter((r) => r.d === d);
+      const avg = mean(rows.flatMap((r) => sectionDefs.map(([, key]) => r[key])));
+      return {
+        department: d, count: rows.length, avg: avg.toFixed(2),
+        tagCls: avg >= 3.8 ? 'tag-accent' : avg >= 3.2 ? 'tag-outline' : 'tag-neutral',
+      };
+    });
+
+    const deptChips = DEPTS.map((d) => ({
+      label: d, cls: this.state.deptFilter.includes(d) ? 'tag-accent' : 'tag-neutral',
+      toggle: () => this.toggleDept(d),
+    }));
+
+    return {
+      dir: lang === 'ar' ? 'rtl' : 'ltr',
+      tr,
+      isEn: lang === 'en', isAr: lang === 'ar',
+      isTabSurvey: this.state.tab === 'survey', isTabDash: this.state.tab === 'dashboard',
+      goSurvey: this.goSurvey, goDash: this.goDash, setEn: this.setEn, setAr: this.setAr,
+      v: this.state.values, setValue: this.setValue,
+      onDeptChange: this.onDeptChange, onSmallTeamChange: this.onSmallTeamChange, onCrmChange: this.onCrmChange,
+      onJobTitleChange: this.onJobTitleChange, onRoleTextChange: this.onRoleTextChange, onMgrTextChange: this.onMgrTextChange,
+      onVendorTextChange: this.onVendorTextChange, onCultureTextChange: this.onCultureTextChange,
+      onPrimaryReasonChange: this.onPrimaryReasonChange, onPrimaryReasonOtherChange: this.onPrimaryReasonOtherChange,
+      onOtherCommentsChange: this.onOtherCommentsChange,
+      deptOptions: DEPTS, ratingOptions: opts5, cultureOptions, recommendOptions, returnOptions, reasonSelectOptions,
+      handleSubmit: this.handleSubmit, resetForm: this.resetForm,
+      notSubmitted: !this.state.submitted, submitted: this.state.submitted,
+      hasErrors: this.state.errors.length > 0, errorList: this.state.errors,
+      showBanner: this.props.showSampleDataBanner !== false,
+      deptChips,
+      kpi: {
+        responses: filtered.length,
+        avg: filtered.length ? `${overallAvg.toFixed(2)}/5` : 'N/A',
+        recommend: filtered.length
+          ? `${Math.round((filtered.filter((r) => r.rec === 'Recommend').length / Math.max(1, filtered.filter((r) => r.rec !== 'Prefer not to say').length)) * 100)}%`
+          : 'N/A',
+        wouldReturn: filtered.length
+          ? `${Math.round((filtered.filter((r) => r.ret === 'Yes').length / filtered.length) * 100)}%`
+          : 'N/A',
+      },
+      sectionBars, reasonBars, cultureBars, linePoints, lineDots, deptRows,
+      feedbackQuotes: FEEDBACK,
+    };
+  }
+}
+</script>
+</body>
+</html>
